@@ -1,13 +1,13 @@
-# Container Exporter (cxp)
+# Container Exporter (CXP)
 
-A resource-friendly, highly efficient and minimal prometheus exporter to track memory & cpu usage of Docker containers along with their lifecycle (uptime)
+A resource-friendly, highly efficient, and minimal Prometheus exporter to track memory and CPU usage of Docker containers along with their lifecycle (uptime)
 
 ## How to use
 
 ### Before You start
  - Port 8000 must be open
  - Docker & Docker Compose should be installed (optional)
- - presence of git
+ - The presence of git
 
 ### Getting started
 - clone and enter the repository using the following commands:
@@ -29,19 +29,19 @@ A resource-friendly, highly efficient and minimal prometheus exporter to track m
 
 #### Can't use Docker? Ok then :
 ```bash
-# no need if done already
+# No need if done already
   chmod +x ./start.sh
 
 # install the required python packages
   pip install -r requirements.txt
 
-# add & at the end to launch in background
+# add & at the end to launch in the background
   ./start.sh 
 
 ``` 
 
 ### Add CXP to Prometheus
-- Edit your prometheus.yml file and add the adress of container-exporter in scrape_configs:
+- Edit your prometheus.yml file and add the address of container-exporter in scrape_configs:
 
 ![Prometheus config](./capture/scrape-config.png "Prometheus configuration file")
 
