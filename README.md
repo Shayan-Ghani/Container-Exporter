@@ -12,8 +12,8 @@ A resource-friendly, highly efficient and minimal prometheus exporter to track m
 ### Getting started
 - clone and enter the repository using the following commands:
 ```bash
-git clone https://github.com/Shayan-Ghani/Container-exporter.git
-cd container-exporter
+  git clone https://github.com/Shayan-Ghani/Container-exporter.git
+  cd container-exporter
 ```
 - Deploy the docker-compose file that suits you the best for instance :
 ```bash 
@@ -29,7 +29,7 @@ cd container-exporter
 
 #### Can't use Docker? Ok then :
 ```bash
-# no need if you have done already
+# no need if done already
   chmod +x ./start.sh
 
 # install the required python packages
