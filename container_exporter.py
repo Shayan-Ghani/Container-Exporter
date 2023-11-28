@@ -36,7 +36,7 @@ def update_container_status():
 
     for dynamic_container in dynamic_containers:
         if dynamic_container.name in [container.name for container in offline_containers]:
-            container_status.labels(container_name=dynamic_container.name).set(0 if dynamic_container.status == "running" else 1)
+            container_status.labels(container_name=dynamic_container.name).set(1 if dynamic_container.status == "running" else 0)
             print(f"container_status for {dynamic_container.name} is : {dynamic_container.status}")
             
 # get containers' stats and update their metrics in async mode
