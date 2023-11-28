@@ -5,7 +5,6 @@ from stats import get_docker_stats as stat
 from prometheus_client import Gauge
 from prometheus_client.exposition import generate_latest
 from flask import Flask, Response, request
-from subprocess import run as run_bash
 from time import time
 from configs import config
 
@@ -16,16 +15,30 @@ container_status = Gauge('docker_container_status', 'Docker container status (0 
 container_cpu_percentage = Gauge('docker_container_cpu_percentage', 'Docker container cpu usage', ['container_name'])
 container_memory_percentage =  Gauge('docker_container_memory_percentage', 'Docker container cpu usage', ['container_name'])
 
-def get_container_status(container_names):
-    try:
-        client = docker_env()
-        for container_name in container_names:
-          container = client.containers.get(container_name)
-          container_status.labels(container_name=container_name).set(0 if container.status == "running" else 1)
-        return f"container_status for {container_name} is : {container.status}"
-    except Exception as e:
-        return f"Error checking container '{container_name}': {str(e)}\n"
+# get the data that relates to running containers
+def get_offline_container():
+    client = docker_env()
+    global offline_containers
+    offline_containers = client.containers.list()
 
+get_offline_container()
+    
+# get the data for all containers (killed exited stopped and running)
+def get_dynamic_container():
+    client = docker_env()
+    global dynamic_containers
+    dynamic_containers = client.containers.list(all=True)
+
+
+def update_container_status():
+    # update the running container_names that is offline with the status of all containers
+    get_dynamic_container()
+
+    for dynamic_container in dynamic_containers:
+        if dynamic_container.name in [container.name for container in offline_containers]:
+            container_status.labels(container_name=dynamic_container.name).set(0 if dynamic_container.status == "running" else 1)
+            print(f"container_status for {dynamic_container.name} is : {dynamic_container.status}")
+ 
 # get containers' stats and update their metrics in async mode
 async def container_stats():
     start = time()
@@ -34,7 +47,6 @@ async def container_stats():
     tasks = [stat.get_container_stats(container) for container in containers]
     all_stats = await gather(*tasks)
     for stats in all_stats:
-        # print(stats[0]['name'][1:])
         container_cpu_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_cpu_percentage(stats[0]))
         container_memory_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_percentage(stats[0]))
     print("container_stats{:10.4f}".format(time() - start), "\n")
@@ -42,15 +54,13 @@ async def container_stats():
 
 @app.route('/')
 def index():
-    return "Prometheus Exporter for Docker Container Status"
+    return "Welcome To CXP Contianer Exporter For Prometheus."
 
 @app.route('/metrics')
 def metrics():    
     start = time()
     try:
-        # call container_status
-        run_bash(["/bin/bash", "./curler.sh"])
-        # call container_stats
+        update_container_status()
         loop = new_event_loop()
         t = [loop.create_task(container_stats())]
         loop.run_until_complete(wait(t))
@@ -62,16 +72,7 @@ def metrics():
     # generate the latest value of metrics
     return Response(generate_latest(), mimetype='text/plain')
 
-# get all contianer_names as a list from url arguments and pass them to get_container_status  
-@app.route('/check_container')
-def check_container():
-    container_names = request.args.get('names')
-    if container_names:
-        container_names_list = container_names.split(',')
-        return get_container_status(container_names_list)
-    else:
-        return "Please provide a container name using the 'name' query parameter."
-
+# app initializer function
 def create_app():
     app.config.from_object(config.Config)
     return app
