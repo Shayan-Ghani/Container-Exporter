@@ -7,7 +7,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 ### Before You start
  - Port 8000 must be open
  - Docker & Docker Compose should be installed (optional)
- - The presence of git
+ - The presence of Git and Python3
 
 ### Getting started
 - clone and enter the repository using the following commands:
