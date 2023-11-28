@@ -2,10 +2,13 @@
 
 A resource-friendly, highly efficient, and minimal Prometheus exporter to track memory and CPU usage of Docker containers along with their lifecycle (uptime)
 
+## DEV STACK
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=ffdd54) ![Docker](https://img.shields.io/badge/docker-3670A0?style=for-the-badge&logo=docker&logoColor=ffff) ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white) ![Gunicorn](https://img.shields.io/badge/gunicorn-%298729.svg?style=for-the-badge&logo=gunicorn&logoColor=white)
+
 ## How to use
 
 ### Before You start
- - Port 8000 must be open
+ - Port 8000 must be open (default port)
  - Docker & Docker Compose should be installed (optional)
  - The presence of Git and Python3
 
@@ -48,6 +51,10 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 - Reload or restart your Prometheus server.
 ### That is it you are good to go, Enjoy Using CXP! "}"
 
+
+## TO-DO
+ - I/O usage 
+ - Network Usage
 
 ## Contributions
 Welcome to CXP! This project is currently in an experimental yet stable version, and we encourage contributions to enhance its functionality, optimize code, and add new features
