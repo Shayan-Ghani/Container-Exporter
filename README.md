@@ -40,6 +40,11 @@ A resource-friendly, highly efficient and minimal prometheus exporter to track m
 
 ``` 
 
+### Add CXP to Prometheus
+- Edit your prometheus.yml file and add the adress of container-exporter in scrape_configs:
+
+![Prometheus config](./capture/scrape-config.png "Prometheus configuration file")
+
 ### That is it you are good to go, Enjoy Using CXP! "}"
 
 
