@@ -17,25 +17,25 @@ cd container-exporter
 ```
 - Deploy the docker-compose file that suits you the best for instance :
 ```bash 
-#make the file executable
-chmod +x ./start.sh
+# make the file executable
+  chmod +x ./start.sh
 
 # with docker compose v1
-docker-compose -f container-exporter.yml up -d
+  docker-compose -f container-exporter.yml up -d
 
 # Or using v2
-docker compose -f container-exporter.yml up -d
+  docker compose -f container-exporter.yml up -d
 ```
 
 #### Can't use Docker? Ok then :
 ```bash
-  # no need if you have done already
+# no need if you have done already
   chmod +x ./start.sh
 
-  # install the required python packages
+# install the required python packages
   pip install -r requirements.txt
 
-  # add & at the end to launch in background
+# add & at the end to launch in background
   ./start.sh 
 
 ``` 
