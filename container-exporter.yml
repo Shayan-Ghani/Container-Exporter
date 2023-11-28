@@ -1,0 +1,12 @@
+version: !!str 3.7
+
+services:
+  cxp:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: container-exporter
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8000:8000
