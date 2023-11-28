@@ -38,7 +38,7 @@ def update_container_status():
         if dynamic_container.name in [container.name for container in offline_containers]:
             container_status.labels(container_name=dynamic_container.name).set(0 if dynamic_container.status == "running" else 1)
             print(f"container_status for {dynamic_container.name} is : {dynamic_container.status}")
- 
+            
 # get containers' stats and update their metrics in async mode
 async def container_stats():
     start = time()
@@ -72,7 +72,6 @@ def metrics():
     # generate the latest value of metrics
     return Response(generate_latest(), mimetype='text/plain')
 
-# app initializer function
 def create_app():
     app.config.from_object(config.Config)
     return app
