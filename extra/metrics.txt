@@ -1,0 +1,21 @@
+# HELP docker_container_status Docker container status (1 = running, 0 = not running)
+# TYPE docker_container_status gauge
+docker_container_status{container_name="container-exporter"} 1.0
+docker_container_status{container_name="grafana"} 1.0
+docker_container_status{container_name="docker-loki-1"} 1.0
+docker_container_status{container_name="prometheus-test"} 1.0
+docker_container_status{container_name="stupefied_dhawan"} 1.0
+# HELP docker_container_cpu_percentage Docker container cpu usage
+# TYPE docker_container_cpu_percentage gauge
+docker_container_cpu_percentage{container_name="container-exporter"} 1.236974710327456
+docker_container_cpu_percentage{container_name="grafana"} 0.06242976279650437
+docker_container_cpu_percentage{container_name="docker-loki-1"} 3.171254332084894
+docker_container_cpu_percentage{container_name="prometheus-test"} 0.0
+docker_container_cpu_percentage{container_name="stupefied_dhawan"} 0.0
+# HELP docker_container_memory_percentage Docker container cpu usage
+# TYPE docker_container_memory_percentage gauge
+docker_container_memory_percentage{container_name="container-exporter"} 0.7654930425572587
+docker_container_memory_percentage{container_name="grafana"} 0.9878087412356549
+docker_container_memory_percentage{container_name="docker-loki-1"} 0.5396905236882447
+docker_container_memory_percentage{container_name="prometheus-test"} 0.663954860268772
+docker_container_memory_percentage{container_name="stupefied_dhawan"} 0.5052427185426377

@@ -5,6 +5,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 ## DEV STACK
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=ffdd54) ![Docker](https://img.shields.io/badge/docker-3670A0?style=for-the-badge&logo=docker&logoColor=ffff) ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white) ![Gunicorn](https://img.shields.io/badge/gunicorn-%298729.svg?style=for-the-badge&logo=gunicorn&logoColor=white)
 
+see a sample of the metrics page in [here](./extra/metrics.txt).
 ## How to use
 
 ### Before You start
@@ -13,7 +14,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
  - The presence of Git and Python3
 
 ### Getting started
-- clone and enter the repository using the following commands:
+- localhostclone and enter the repository using the following commands:
 ```bash
   git clone https://github.com/Shayan-Ghani/Container-exporter.git
   cd container-exporter
@@ -48,7 +49,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 
 ![Prometheus config](./capture/scrape-config.png "Prometheus configuration file")
 
-- Reload or restart your Prometheus server.
+- Reload or restart your Prometheus server and reachout to `http://127.0.0.1:8000/metrics`
 ### That is it you are good to go, Enjoy Using CXP! "}"
 
 
