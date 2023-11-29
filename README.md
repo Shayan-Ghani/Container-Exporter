@@ -66,7 +66,7 @@ Check out [dashboards](./dashboards) directory for json files. including CPU & M
 ```
 - replace `<your uid>` with your actual prometheus datasource uid. 
 
-- now head to grafana dashboards and hit `new > import` then copy the dashboard json file and paste it into `Import via panel json`
+- now head to grafana dashboards and hit `new > import` then copy the dashboard json file content and paste it into `Import via panel json`
 
 - hit the `load` button and Done!
 
