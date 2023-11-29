@@ -14,7 +14,7 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
  - The presence of Git and Python3
 
 ### Getting started
-- localhostclone and enter the repository using the following commands:
+- clone and enter the repository using the following commands:
 ```bash
   git clone https://github.com/Shayan-Ghani/Container-exporter.git
   cd container-exporter
@@ -51,6 +51,12 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 
 - Reload or restart your Prometheus server and reachout to `http://127.0.0.1:8000/metrics`
 ### That is it you are good to go, Enjoy Using CXP! "}"
+
+## Grafana Dashboards
+Check out [dashboards](./dashboards) directory for json files. including CPU & Memomory usage + containers status (uptime).
+**Change `Your prometheus data source uid` with the uid of prometheus data source uid. you can find it this way:** 
+- Reach out to Grafana then enter  `Home > Administration > Data sources`  then click on your Prometheus data source.
+- the characters after `datasources/edit/` is your uid. (e.g datasources/edit/**c8e586ac-4262-4aad5-a103-1240ss826424**)
 
 
 ## TO-DO
