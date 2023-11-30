@@ -60,7 +60,7 @@ nohup ./start.sh -out ./nohup.out
 # to stop cxp without docker use this command 
 kill -9 <PID>
 ```
-Replace <PID> with the pid of ./start.sh script.
+Replace `<PID>` with the pid of ./start.sh script.
 
 ### Add CXP to Prometheus
 - Edit your `prometheus.yml` file and add the address of container-exporter in scrape_configs:
