@@ -21,10 +21,10 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 ```
 - Deploy the docker-compose file that suits you the best for instance :
 ```bash 
-# make the file executable
+# Make the file executable
   chmod +x ./start.sh
 
-# with docker compose v1
+# With docker compose v1
   docker-compose -f container-exporter.yml up -d
 
 # Or using v2
@@ -36,10 +36,15 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 # No need if done already
   chmod +x ./start.sh
 
-# install the required python packages
+# Set up virtualenv
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install -U pip
+
+# Install the required python packages
   pip install -r requirements.txt
 
-# add & at the end to launch in the background
+# Add & at the end to launch in the background
   ./start.sh 
 
 ``` 

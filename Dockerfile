@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM python:3.10-slim-buster
 
 LABEL maintainer="Shayan Ghani <shayanghani1384@gmail.com>"
 
