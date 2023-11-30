@@ -22,7 +22,7 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 - clone and enter the repository using the following commands:
 ```bash
   git clone https://github.com/Shayan-Ghani/Container-exporter.git
-  cd container-exporter
+  cd Container-Exporter
 ```
 - Deploy the docker-compose file that suits you the best for instance :
 ```bash 
@@ -49,10 +49,18 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 # Install the required python packages
   pip install -r requirements.txt
 
-# Add & at the end to launch in the background
-  ./start.sh 
-
+# start the initializer script.
+  ./start.sh & 
 ``` 
+
+You can use nohup as well : 
+```
+nohup ./start.sh -out ./nohup.out
+
+# to stop cxp without docker use this command 
+kill -9 <PID>
+```
+Replace <PID> with the pid of ./start.sh script.
 
 ### Add CXP to Prometheus
 - Edit your `prometheus.yml` file and add the address of container-exporter in scrape_configs:
