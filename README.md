@@ -8,7 +8,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 see a sample of the metrics page in [here](./extra/metrics.txt).
 
 ## DEMO
-<img src="https://s31.picofile.com/file/8470036968/CXP_DEMO.gif" width="100%" height="10%" alt="wait for the demo to load" />
+<img src="./capture/CXP-DEMO.gif" width="100%" height="50%" />
 
 
 ## Step-by-Step Guide
