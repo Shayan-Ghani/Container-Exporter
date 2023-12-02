@@ -67,24 +67,24 @@ Replace `<PID>` with the pid of ./start.sh script.
 
 ![Prometheus config](./capture/scrape-config.png "Prometheus configuration file")
 
-- Reload or restart your Prometheus server and reachout to `http://127.0.0.1:8000/metrics`
+- Reload or restart your Prometheus server and reach out to `http://127.0.0.1:8000/metrics`
 ### That is it you are good to go, Enjoy Using CXP! "}"
 
 ## Grafana Dashboards
-Check out [dashboards](./dashboards) directory for json files. including CPU & Memomory usage + containers status (uptime).
+Check out [dashboards](./dashboards) directory for Json files. including CPU & Memory usage + containers status (uptime).
 
-**Change `Your prometheus data source uid` with the uid of prometheus data source uid. you can find it this way:** 
+**Change `Your Prometheus data source uid` with the uid of Prometheus data source uid. you can find it this way:** 
 - Reach out to Grafana then enter  `Home > Administration > Data sources`  then click on your Prometheus data source.
-- the characters after `datasources/edit/` is your uid. (e.g datasources/edit/**c8e586ac-4262-4aad5-a103-1240ss826424**)
+- the characters after `datasources/edit/` are your uid. (e.g datasources/edit/**c8e586ac-4262-4aad5-a103-1240ss826424**)
 
-- alternatively, use `dashboard-gen.sh` script to change the dashboards uid by providing the uid as the first argument of the script. do the following steps:
+- alternatively, use `dashboard-gen.sh` script to change the dashboards' uid by providing the uid as the first argument of the script. do the following steps:
 
 ```
  cd scripts && bash dashboard-gen.sh <your uid> 
 ```
-- replace `<your uid>` with your actual prometheus datasource uid. 
+- replace `<your uid>` with your Prometheus datasource uid. 
 
-- now head to grafana dashboards and hit `new > import` then copy the dashboard json file and paste it into `Import via panel json`
+- now head to Grafana dashboards and hit `new > import` then copy the dashboard Json file and paste it into `Import via panel json`
 
 - hit the `load` button and Done!
 
