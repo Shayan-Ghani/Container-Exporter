@@ -2,7 +2,7 @@ FROM python:3.10-slim-buster
 
 LABEL maintainer="Shayan Ghani <shayanghani1384@gmail.com>"
 
-ENV CONTAINER_EXPORTER_ENV=production CONTAINER_EXPORTER_DEBUG=0
+ENV CONTAINER_EXPORTER_ENV=production CONTAINER_EXPORTER_DEBUG=0 CONTAINER_EXPORTER_PORT=8000
 
 EXPOSE 8000
 
@@ -16,6 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "./start.sh" ]
+CMD "./start.sh" $CONTAINER_EXPORTER_PORT
 
 

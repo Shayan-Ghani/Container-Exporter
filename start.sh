@@ -1,4 +1,5 @@
 #!/bin/sh
 
-gunicorn -b 0.0.0.0:8000 -w 3 --access-logfile - --error-logfile - --reload "container_exporter:create_app()"
+port="$1"
+gunicorn -b 0.0.0.0:$port -w 3 --access-logfile - --error-logfile - --reload "container_exporter:create_app()"
 

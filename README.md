@@ -31,10 +31,10 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 
 # With docker compose v1
   docker-compose -f container-exporter.yml up -d
-
 # Or using v2
   docker compose -f container-exporter.yml up -d
 ```
+*alternatively, run `docker-compose -f container-exporter-local.yml up --build -d` to build from Dockerfile*
 
 #### Can't use Docker? Ok then :
 ```bash
@@ -61,6 +61,15 @@ nohup ./start.sh -out ./nohup.out
 kill -9 <PID>
 ```
 Replace `<PID>` with the pid of ./start.sh script.
+
+#### Run With A Custom Port:
+```bash
+./start.sh <your custome port>
+# or 
+CONTAINER_EXPORTER_PORT=<your custom port> docker-compose -f container-exporter.yml up -d
+```
+
+Change `<your custom port>` with a port of your choice.
 
 ### Add CXP to Prometheus
 - Edit your `prometheus.yml` file and add the address of container-exporter in scrape_configs:
