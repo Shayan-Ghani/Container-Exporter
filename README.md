@@ -67,7 +67,7 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
   pip install -r requirements.txt
 
 # start the initializer script.
-  ./start.sh & 
+  ./start.sh &
 ``` 
 
 You can use nohup as well : 
@@ -81,7 +81,7 @@ Replace `<PID>` with the pid of ./start.sh script.
 
 #### 🚢 Run With A Custom Port:
 ```bash
-./start.sh <your custome port>
+./start.sh <your custome port> &
 # or 
 CONTAINER_EXPORTER_PORT=<your custom port> docker-compose -f container-exporter.yml up -d
 ```
