@@ -13,7 +13,7 @@ app = Flask(__name__)
 # Create Prometheus gauge metrics for status and stats
 container_status = Gauge('docker_container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
 container_cpu_percentage = Gauge('docker_container_cpu_percentage', 'Docker container cpu usage', ['container_name'])
-container_memory_percentage =  Gauge('docker_container_memory_percentage', 'Docker container cpu usage', ['container_name'])
+container_memory_percentage =  Gauge('docker_container_memory_percentage', 'Docker container memory usage', ['container_name'])
 
 # get the data that relates to running containers
 def get_offline_container():
