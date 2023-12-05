@@ -33,7 +33,18 @@ def calculate_disk_io(stats):
 
     return disk_io_read, disk_io_write
 
+def calculate_network_io(stats):
+    network_rx_bytes = 0
+    network_tx_bytes = 0
 
+    if "networks" in stats:
+        networks = stats["networks"]
+
+        for network in networks.values():
+            network_rx_bytes += network["rx_bytes"]
+            network_tx_bytes += network["tx_bytes"]
+
+    return network_rx_bytes, network_tx_bytes
 
 async def get_container_stats(container):
     stats = await container.stats(stream=False)

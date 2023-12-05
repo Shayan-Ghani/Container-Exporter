@@ -19,7 +19,9 @@ container_memory_percentage =  Gauge('docker_container_memory_percentage', 'Dock
 disk_io_read_counter = Counter("disk_io_read_bytes_total", "Total number of bytes read from disk", ['container_name'])
 disk_io_write_counter = Counter("disk_io_write_bytes_total", "Total number of bytes written to disk", ['container_name'])
 
-
+# Create Prometheus Counter metric for Network I/O
+network_rx_counter = Counter("network_rx_bytes_total", "Total number of bytes received over the network", ['container_name'])
+network_tx_counter = Counter("network_tx_bytes_total", "Total number of bytes transmitted over the network", ['container_name'])
 
 # get the data that relates to running containers
 def get_offline_container():
@@ -57,6 +59,8 @@ async def container_stats():
         container_memory_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_percentage(stats[0]))        
         disk_io_read_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[0])
         disk_io_write_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[1])
+        network_rx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[0])
+        network_tx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[1])
         
     print("container_stats{:10.4f}".format(time() - start), "\n")
 
