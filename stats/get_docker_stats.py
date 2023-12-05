@@ -22,14 +22,16 @@ def calculate_disk_io(stats):
     disk_io_read = 0
     disk_io_write = 0
 
-    if "io_service_bytes_recursive" in stats["blkio_stats"]:
+    if "blkio_stats" in stats and "io_service_bytes_recursive" in stats["blkio_stats"]:
         io_service_bytes_recursive = stats["blkio_stats"]["io_service_bytes_recursive"]
 
-        for io_stat in io_service_bytes_recursive:
-            if io_stat["op"] == "read":
-                disk_io_read += io_stat["value"]
-            elif io_stat["op"] == "write":
-                disk_io_write += io_stat["value"]
+        if io_service_bytes_recursive is not None:
+            for io_stat in io_service_bytes_recursive:
+                if "op" in io_stat and "value" in io_stat:
+                    if io_stat["op"] == "read":
+                        disk_io_read += io_stat["value"]
+                    elif io_stat["op"] == "write":
+                        disk_io_write += io_stat["value"]
 
     return disk_io_read, disk_io_write
 
