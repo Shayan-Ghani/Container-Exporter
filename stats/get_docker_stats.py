@@ -17,6 +17,36 @@ def calculate_memory_percentage(stats):
     memory_percent = (memory_usage / memory_limit) * 100.0
 
     return memory_percent
+    
+def calculate_disk_io(stats):
+    disk_io_read = 0
+    disk_io_write = 0
+
+    if "blkio_stats" in stats and "io_service_bytes_recursive" in stats["blkio_stats"]:
+        io_service_bytes_recursive = stats["blkio_stats"]["io_service_bytes_recursive"]
+
+        if io_service_bytes_recursive is not None:
+            for io_stat in io_service_bytes_recursive:
+                if "op" in io_stat and "value" in io_stat:
+                    if io_stat["op"] == "read":
+                        disk_io_read += io_stat["value"]
+                    elif io_stat["op"] == "write":
+                        disk_io_write += io_stat["value"]
+
+    return disk_io_read, disk_io_write
+
+def calculate_network_io(stats):
+    network_rx_bytes = 0
+    network_tx_bytes = 0
+
+    if "networks" in stats:
+        networks = stats["networks"]
+
+        for network in networks.values():
+            network_rx_bytes += network["rx_bytes"]
+            network_tx_bytes += network["tx_bytes"]
+
+    return network_rx_bytes, network_tx_bytes
 
 async def get_container_stats(container):
     stats = await container.stats(stream=False)
