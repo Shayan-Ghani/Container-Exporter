@@ -1,6 +1,6 @@
 # 🚀 Container Exporter (CXP)
 
-A resource-friendly, highly efficient, and minimal Prometheus exporter to track memory and CPU usage of Docker containers along with their lifecycle (uptime)
+A resource-friendly, highly efficient, and minimal Prometheus exporter to track Memory, CPU, Disk and Network I/O usage of Docker containers along with their lifecycle (uptime).
 
 ## Table of Contents
 1. [DEV STACK](#%EF%B8%8F-dev-stack)
@@ -115,12 +115,9 @@ Check out [dashboards](./dashboards) directory for Json files. including CPU & M
 - hit the `load` button and Done!
 
 ## TO-DO
- - I/O usage 
- - Network Usage
-
+ - [x]  Disk I/O usage 
+ - [x]  Network I/O Usage
 ## Contributions
 Welcome to CXP! This project is currently in an experimental yet stable version, and we encourage contributions to enhance its functionality, optimize code, and add new features
 
-Feel free to contribute in any way you can. If you come across a bug or have a suggestion, please don't hesitate to file an issue. Your input is valuable and helps us improve CXP for everyone. We appreciate your contribution to making CXP even better! If you have any questions or need assistance, feel free to reach out. Thank you!
-
-Copyright © 2023 Shayan Ghani shayanghani1384@gmail.com
+Feel free to contribute in any way you can. If you come across a bug or have a suggestion, please don't hesitate to file an issue. Your input is valuable and helps us improve CXP for everyone; Therefore, add any desired function or feature to TO DO section. We appreciate your contribution to making CXP even better! If you have any questions or need assistance, feel free to reach out. Thank you!
