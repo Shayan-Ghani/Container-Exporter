@@ -119,6 +119,8 @@ Check out [dashboards](./dashboards) directory for Json files. including CPU & M
 ## TO-DO
  - [x]  Disk I/O usage 
  - [x]  Network I/O Usage
+ - [x]  Add metrics in units of byte
+ - [ ]  Design grafana dashboards and share them on grafana cloud
 ## Contributions
 Welcome to CXP! This project is currently in an experimental yet stable version, and we encourage contributions to enhance its functionality, optimize code, and add new features
 
