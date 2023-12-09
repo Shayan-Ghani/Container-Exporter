@@ -5,8 +5,8 @@ import asyncio
 def calculate_cpu_percentage(stats):
     cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
     system_delta = stats['cpu_stats']['system_cpu_usage'] - stats['precpu_stats']['system_cpu_usage']
-    
-    cpu_percent = (cpu_delta / system_delta) * len(stats['cpu_stats']['cpu_usage']['percpu_usage']) * 100.0
+    number_cpus = stats['cpu_stats']['online_cpus'] 
+    cpu_percent = (cpu_delta / system_delta) * number_cpus * 100.0 
     
     return cpu_percent
 
