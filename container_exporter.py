@@ -11,18 +11,18 @@ from configs import config
 app = Flask(__name__)
 
 # Create Prometheus gauge metrics for status and stats
-container_status = Gauge('docker_container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
-container_cpu_percentage = Gauge('docker_container_cpu_percentage', 'Docker container cpu usage', ['container_name'])
-container_memory_percentage = Gauge('docker_container_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
-container_memory_usage_bytes_total = Gauge('docker_container_memory_usage_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
+container_status = Gauge('container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
+container_cpu_percentage = Gauge('container_cpu_percentage', 'Docker container cpu usage', ['container_name'])
+container_memory_percentage = Gauge('container_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
+container_memory_usage_bytes_total = Gauge('container_memory_usage_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
 
 # Create Prometheus Counter metric for Disk I/O 
-disk_io_read_counter = Counter("disk_io_read_bytes_total", "Total number of bytes read from disk", ['container_name'])
-disk_io_write_counter = Counter("disk_io_write_bytes_total", "Total number of bytes written to disk", ['container_name'])
+disk_io_read_counter = Counter("container_disk_io_read_bytes_total", "Total number of bytes read from disk", ['container_name'])
+disk_io_write_counter = Counter("container_disk_io_write_bytes_total", "Total number of bytes written to disk", ['container_name'])
 
 # Create Prometheus Counter metric for Network I/O
-network_rx_counter = Counter("network_rx_bytes_total", "Total number of bytes received over the network", ['container_name'])
-network_tx_counter = Counter("network_tx_bytes_total", "Total number of bytes transmitted over the network", ['container_name'])
+network_rx_counter = Counter("container_network_rx_bytes_total", "Total number of bytes received over the network", ['container_name'])
+network_tx_counter = Counter("container_network_tx_bytes_total", "Total number of bytes transmitted over the network", ['container_name'])
 
 # get the data that relates to running containers
 def get_offline_container():
