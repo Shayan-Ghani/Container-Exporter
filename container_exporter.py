@@ -13,7 +13,8 @@ app = Flask(__name__)
 # Create Prometheus gauge metrics for status and stats
 container_status = Gauge('docker_container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
 container_cpu_percentage = Gauge('docker_container_cpu_percentage', 'Docker container cpu usage', ['container_name'])
-container_memory_percentage =  Gauge('docker_container_memory_percentage', 'Docker container memory usage', ['container_name'])
+container_memory_percentage = Gauge('docker_container_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
+container_memory_usage_bytes_total = Gauge('docker_container_memory_usage_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
 
 # Create Prometheus Counter metric for Disk I/O 
 disk_io_read_counter = Counter("disk_io_read_bytes_total", "Total number of bytes read from disk", ['container_name'])
@@ -56,7 +57,8 @@ async def container_stats():
     all_stats = await gather(*tasks)
     for stats in all_stats:
         container_cpu_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_cpu_percentage(stats[0]))
-        container_memory_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_percentage(stats[0]))        
+        container_memory_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_usage(stats[0])[0])        
+        container_memory_usage_bytes_total.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_usage(stats[0])[1])        
         disk_io_read_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[0])
         disk_io_write_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[1])
         network_rx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[0])

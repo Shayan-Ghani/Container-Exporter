@@ -10,13 +10,13 @@ def calculate_cpu_percentage(stats):
     
     return cpu_percent
 
-def calculate_memory_percentage(stats):
-    memory_usage = stats['memory_stats']['usage']
+def calculate_memory_usage(stats):
+    memory_usage_bytes = stats['memory_stats']['usage']
     memory_limit = stats['memory_stats']['limit']
 
-    memory_percent = (memory_usage / memory_limit) * 100.0
+    memory_percent = (memory_usage_bytes / memory_limit) * 100.0
 
-    return memory_percent
+    return memory_percent, memory_usage_bytes
     
 def calculate_disk_io(stats):
     disk_io_read = 0
