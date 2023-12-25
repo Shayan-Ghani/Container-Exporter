@@ -121,9 +121,10 @@ Check out [dashboards](./dashboards) directory for Json files. including CPU & M
  - [x]  Network I/O Usage
  - [x]  Add metrics in units of byte
  - [ ]  Design grafana dashboards and share them on grafana cloud
+ - [ ]  Check and Unregister *stat* metrics for containers that are not running
 ## Contributions
 Welcome to CXP! This project is currently in an experimental yet stable version, and we encourage contributions to enhance its functionality, optimize code, and add new features
 
-Feel free to contribute in any way you can. If you come across a bug or have a suggestion, please don't hesitate to file an issue. Your input is valuable and helps us improve CXP for everyone; Therefore, add any desired function or feature to TO DO section. We appreciate your contribution to making CXP even better! If you have any questions or need assistance, feel free to reach out. Thank you!
+Feel free to contribute in any wacacy you can. If you come across a bug or have a suggestion, please don't hesitate to file an issue. Your input is valuable and helps us improve CXP for everyone; Therefore, add any desired function or feature to TO DO section. We appreciate your contribution to making CXP even better! If you have any questions or need assistance, feel free to reach out. Thank you!
 
 - If you want to add metrics to cxp, make sure the naming convention is conformed to. (`container_metric_name`)
