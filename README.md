@@ -120,8 +120,9 @@ Check out [dashboards](./dashboards) directory for Json files. including CPU & M
  - [x]  Disk I/O usage 
  - [x]  Network I/O Usage
  - [x]  Add metrics in units of byte
+ - [x]  Check and Unregister *stat* metrics for containers that are not running
  - [ ]  Design grafana dashboards and share them on grafana cloud
- - [ ]  Check and Unregister *stat* metrics for containers that are not running
+ - [ ]  Design and develop a static website to showcase Documentation, new features, etc.
 ## Contributions
 Welcome to CXP! This project is currently in an experimental yet stable version, and we encourage contributions to enhance its functionality, optimize code, and add new features
 
