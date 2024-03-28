@@ -1,11 +1,13 @@
 # ChangeLog for CXP
 
-Version : 1.1
+Version : 1.1.1
 
 ## Key points
 - Updated metrics' names
-- resolved Container 'Container Deleting Problem' issue
+- resolved Container 'Container Deleting Problem' Issue
+- resolved container status update Issue
 - added metrics in the format of bytes
+ 
 
 *Edit your metric names in the following way:*
 

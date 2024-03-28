@@ -10,7 +10,7 @@ from configs import config
 app = Flask(__name__)
 
 
-# TO-DO : add change log
+# TO-DO : handle init containers with better storage methods
 # TO-DO : modulization
 
 # Create Prometheus gauge metrics for status and stats
@@ -28,39 +28,32 @@ network_rx_counter = Counter("cxp_network_rx_bytes_total", "Total number of byte
 network_tx_counter = Counter("cxp_network_tx_bytes_total", "Total number of bytes transmitted over the network", ['container_name'])
     
 
-metrics_names = [container_cpu_percentage,  container_memory_percentage ,  container_memory_bytes_total , disk_io_read_counter , disk_io_write_counter , network_rx_counter ,  network_tx_counter ] 
-
-def flush_metric_labels(metrics:list):
-    for m in metrics:
-        m.clear()
-   
 # get the data that relates to running containers at the first startup
 def get_init_container():
     client = docker_env()
-    global init_containers
-    init_containers = client.containers.list()
+    return client.containers.list()
 
-get_init_container()
+init_containers_names = [c.name for c in get_init_container()]
     
 # get the data for all containers (killed exited stopped and running)
 def get_all_container():
     client = docker_env()
-    global all_containers
-    all_containers = client.containers.list(all=True)
+    return client.containers.list(all=True)
 
 
 def update_container_status():
     # update the running container_names that is offline with the status of all containers
-    get_all_container()
+    all_containers = get_all_container()
     for container in all_containers:
-        if container.status != "running":
-            flush_metric_labels(metrics_names)
-        if container.name in [c.name for c in init_containers]:
+        if container.name in init_containers_names:
             container_status.labels(container_name=container.name).set(1 if container.status == "running" else 0)
-
-    for removed_container in init_containers:
-        if removed_container.name not in [c.name for c in all_containers]:
-            container_status.labels(container_name=removed_container.name).set(0)    
+        elif container.status == "running":
+            container_status.labels(container_name=container.name).set(1)
+            init_containers_names.append(container.name)
+            
+    for removed_container_name in init_containers_names:
+        if removed_container_name not in [c.name for c in all_containers]:
+            container_status.labels(container_name=removed_container_name).set(0)    
 
 # get containers' stats and update their metrics in async mode
 async def container_stats():
@@ -78,6 +71,15 @@ async def container_stats():
         network_tx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[1])
 
 
+metrics_names = [container_cpu_percentage,  container_memory_percentage ,  container_memory_bytes_total , disk_io_read_counter , disk_io_write_counter , network_rx_counter ,  network_tx_counter ] 
+
+def flush_metric_labels():
+    all_containers = get_all_container()
+    for container in all_containers:
+        if container.status != "running":
+            for m in metrics_names:
+                m.clear()
+
 @app.route('/')
 def index():
     return "Welcome To CXP, Contianer Exporter For Prometheus."
@@ -86,6 +88,7 @@ def index():
 def metrics():    
     try:
         update_container_status()
+        flush_metric_labels()
         loop = new_event_loop()
         t = [loop.create_task(container_stats())]
         loop.run_until_complete(wait(t))
