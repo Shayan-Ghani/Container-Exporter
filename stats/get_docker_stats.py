@@ -49,7 +49,7 @@ def calculate_network_io(stats) -> bytes:
 
     if "networks" in stats:
         networks = stats["networks"]
-        if network is not None:
+        if networks is not None:
             for network in networks.values():
                 network_rx_bytes += network["rx_bytes"]
                 network_tx_bytes += network["tx_bytes"]
