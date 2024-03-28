@@ -1,4 +1,4 @@
-def calculate_cpu_percentage(stats):
+def calculate_cpu_percentage(stats) -> float:
     cpu_percent = 0
     
     cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
@@ -9,7 +9,7 @@ def calculate_cpu_percentage(stats):
     
     return cpu_percent
 
-def calculate_memory_usage(stats):
+def calculate_memory_percentage(stats) -> float:
     memory_percent = 0
     memory_usage_bytes = 0
     
@@ -18,9 +18,15 @@ def calculate_memory_usage(stats):
     if memory_usage_bytes is not None and memory_limit is not None:
         memory_percent = (memory_usage_bytes / memory_limit) * 100.0
 
-    return memory_percent, memory_usage_bytes
+    return memory_percent
+
+def calculate_memory_bytes(stats) -> bytes:
+    memory_usage_bytes = stats['memory_stats']['usage']
+    if memory_usage_bytes is not None:
+        return memory_usage_bytes
+    return 0
     
-def calculate_disk_io(stats):
+def calculate_disk_io(stats) -> bytes:
     disk_io_read = 0
     disk_io_write = 0
 
@@ -37,7 +43,7 @@ def calculate_disk_io(stats):
 
     return disk_io_read, disk_io_write
 
-def calculate_network_io(stats):
+def calculate_network_io(stats) -> bytes:
     network_rx_bytes = 0
     network_tx_bytes = 0
 
