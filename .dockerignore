@@ -5,6 +5,7 @@ Dockerfile
 .gitignore
 .dockerignore
 docs/
+TO-DO/
 README.md
 LICENCE
 CHANGELOG.md

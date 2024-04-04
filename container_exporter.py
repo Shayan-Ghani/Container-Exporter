@@ -2,9 +2,11 @@ from asyncio import gather, new_event_loop, wait
 from aiodocker import Docker 
 from docker import from_env as docker_env
 from stats import get_docker_stats as stat
+from status import container_status_updater as status_updater
+from flusher import metric_flusher as flusher
 from prometheus_client import Gauge, Counter
 from prometheus_client.exposition import generate_latest
-from flask import Flask, Response, request
+from flask import Flask, Response
 from configs import config
 
 app = Flask(__name__)
@@ -28,35 +30,16 @@ network_rx_counter = Counter("cxp_network_rx_bytes_total", "Total number of byte
 network_tx_counter = Counter("cxp_network_tx_bytes_total", "Total number of bytes transmitted over the network", ['container_name'])
     
 
-# get the data that relates to running containers at the first startup
-def get_init_container():
+metrics = [container_cpu_percentage,  container_memory_percentage ,  container_memory_bytes_total , disk_io_read_counter , disk_io_write_counter , network_rx_counter ,  network_tx_counter ] 
+
+def Container_status():
     client = docker_env()
-    return client.containers.list()
-
-init_containers_names = [c.name for c in get_init_container()]
-    
-# get the data for all containers (killed exited stopped and running)
-def get_all_container():
-    client = docker_env()
-    return client.containers.list(all=True)
-
-
-def update_container_status():
-    # update the running container_names that is offline with the status of all containers
-    all_containers = get_all_container()
-    for container in all_containers:
-        if container.name in init_containers_names:
-            container_status.labels(container_name=container.name).set(1 if container.status == "running" else 0)
-        elif container.status == "running":
-            container_status.labels(container_name=container.name).set(1)
-            init_containers_names.append(container.name)
-            
-    for removed_container_name in init_containers_names:
-        if removed_container_name not in [c.name for c in all_containers]:
-            container_status.labels(container_name=removed_container_name).set(0)    
+    all_containers = client.containers.list(all=True)
+    status_updater.update_status(container_status, all_containers)
+    flusher.flush_metrics(metrics, all_containers)
 
 # get containers' stats and update their metrics in async mode
-async def container_stats():
+async def Container_stats():
     docker = Docker()
     containers = await docker.containers.list()
     tasks = [stat.get_container_stats(container) for container in containers]
@@ -71,14 +54,6 @@ async def container_stats():
         network_tx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[1])
 
 
-metrics_names = [container_cpu_percentage,  container_memory_percentage ,  container_memory_bytes_total , disk_io_read_counter , disk_io_write_counter , network_rx_counter ,  network_tx_counter ] 
-
-def flush_metric_labels():
-    all_containers = get_all_container()
-    for container in all_containers:
-        if container.status != "running":
-            for m in metrics_names:
-                m.clear()
 
 @app.route('/')
 def index():
@@ -87,10 +62,9 @@ def index():
 @app.route('/metrics')
 def metrics():    
     try:
-        update_container_status()
-        flush_metric_labels()
+        Container_status()
         loop = new_event_loop()
-        t = [loop.create_task(container_stats())]
+        t = [loop.create_task(Container_stats())]
         loop.run_until_complete(wait(t))
     except Exception as e:
         return f"Error running script: {str(e)}"
