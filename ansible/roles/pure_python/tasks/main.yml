@@ -9,7 +9,7 @@
   shell: python3 -m venv venv
 
 - name : build cxp 
-  shell : source "{{repo_path}}/venv/bin/activate" && pip install -U pip && pip install "{{repo_path}}/requirements.txt"
+  shell : source "{{repo_path}}/venv/bin/activate" && pip install -U pip && pip install -r "{{repo_path}}/requirements.txt"
 
 - name: deploy cxp
   shell: bash {{repo_path}}/start.sh &
