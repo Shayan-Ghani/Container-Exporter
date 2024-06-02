@@ -1,0 +1,12 @@
+---
+
+- name : Checkout the repo
+  git:
+    repo: "{{repo_addr}}"
+    dest: "{{repo_path}}"
+
+- name: build cxp
+  shell: CONTEXT={{repo_path}} docker-compose -f {{compose_file}} build
+
+- name: deploy cxp
+  shell: docker-compose -f {{compose_file}} up -d

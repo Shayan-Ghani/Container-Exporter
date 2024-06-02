@@ -1,0 +1,4 @@
+home_dir: "/home/ubuntu"
+repo_path: "{{home_dir}}/container-exporter"
+repo_addr: "https://github.com/Shayan-Ghani/Container-Exporter.git"
+compose_file: "{{repo_path}}/container-exporter-local.yml"

@@ -9,6 +9,8 @@ README.md
 LICENCE
 CHANGELOG.md
 *.yml
+TODO/
+ansible/
 # Created by https://www.toptal.com/developers/gitignore/api/flask,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask,python
 

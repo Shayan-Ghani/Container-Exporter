@@ -3,7 +3,7 @@ version: !!str 3.7
 services:
   cxp:
     build: 
-      context: .
+      context: ${{CONTEXT}}
       dockerfile: ./Dockerfile
     container_name: container-exporter
     volumes:
