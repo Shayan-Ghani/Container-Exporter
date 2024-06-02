@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to CXP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #FAF5E4; /* Beige background */
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .welcome-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff; /* White box for content */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+            border-radius: 10px; /* Smooth corners */
+        }
+        h1 {
+            color: #E44D26; /* Prometheus red */
+            font-weight: 700;
+            font-size: 3em;
+            margin: 0;
+            padding-bottom: 10px; /* Some space under the heading */
+        }
+        p {
+            color: #333;
+            font-size: 1.2em;
+        }
+        .styled-link {
+            color: #E44D26; /* Prometheus red */
+            text-decoration: none; /* Remove underline */
+            font-weight: 700; /* Make it bold */
+            transition: color 0.3s; /* Smooth transition */
+        }
+        .styled-link:hover {
+            color: #cc3b20; /* Darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>WELCOME TO CXP</h1>
+        <p>Your gateway to monitor Containers with Prometheus</p>
+        <p><a href="/metrics" class="styled-link">metrics</a></p> <!-- Link with style -->
+    </div>
+</body>
+</html>
+
+

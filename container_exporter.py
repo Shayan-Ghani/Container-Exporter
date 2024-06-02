@@ -6,14 +6,11 @@ from status import container_status_updater as status_updater
 from flusher import metric_flusher as flusher
 from prometheus_client import Gauge, Counter
 from prometheus_client.exposition import generate_latest
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 from configs import config
 
 app = Flask(__name__)
 
-
-# TO-DO : handle init containers with better storage methods
-# TO-DO : modulization
 
 # Create Prometheus gauge metrics for status and stats
 container_status = Gauge('cxp_container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
@@ -57,8 +54,8 @@ async def Container_stats():
 
 @app.route('/')
 def index():
-    return "Welcome To CXP, Contianer Exporter For Prometheus."
-
+    # return "Welcome To CXP, Contianer Exporter For Prometheus."
+    return render_template("welcome.html")
 @app.route('/metrics')
 def metrics():    
     try:
@@ -67,6 +64,8 @@ def metrics():
         t = [loop.create_task(Container_stats())]
         loop.run_until_complete(wait(t))
     except Exception as e:
+    # add for clients to see what's wrong in the logs.
+        print(f"Error running script: {str(e)}")
         return f"Error running script: {str(e)}"
 
     # generate the latest value of metrics
