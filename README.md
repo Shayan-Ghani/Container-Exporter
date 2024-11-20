@@ -31,7 +31,7 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 ### Before You start
  - Port 8000 must be open (default port)
  - Docker & Docker Compose should be installed (optional)
- - The presence of Git and Python3
+ - The presence of Git and Python3.10
 
 ### Getting started
 
