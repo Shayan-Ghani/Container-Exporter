@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: read
+  
+jobs:
+  
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      -
+        id: build
+        name: Build
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          tags: ${{github.registry_addr}}/Container-Exporter:latest
+  
+  # test:
+    
+  # ## pytest to be implemented here ...
+          
+  release:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Bump version and push tag
+        id: bump
+        uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+
+      - 
+        name: login to docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}          
+      -
+        id: build
+        name: Build and Push the image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: devopsteen/cxp:${{ steps.bump.outputs.new_tag }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        with:
+          body: ${{ steps.bump.outputs.changelog }}
+          tag_name: ${{ steps.bump.outputs.new_tag }}
