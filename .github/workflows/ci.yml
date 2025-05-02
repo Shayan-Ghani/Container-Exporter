@@ -19,19 +19,20 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Login to GHCR
-        uses: docker/login-action@9780b0c
+        uses: docker/login-action@v3
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
 
+
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@4574d27
-
+        uses: docker/setup-qemu-action@v3
+  
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@c47758b
-
-      - name: Build and push
-        uses: docker/build-push-action@c5f3f8e
+        uses: docker/setup-buildx-action@v3
+  
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -44,6 +45,7 @@ jobs:
   release:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    needs: docker-build
     steps:
       - 
         name: Bump version and push tag
@@ -52,14 +54,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: patch
-
-      - 
-        name: Login to GHCR
-        uses: docker/login-action@9780b0c
-        with:
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_TOKEN }}     
-          
 
 
       - name: Create Release
