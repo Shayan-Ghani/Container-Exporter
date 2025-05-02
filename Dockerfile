@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
 
 COPY . .
 
-RUN chmod +x /opt/src/healthcheck.sh
+RUN chmod +x /opt/src/scripts/healthcheck.sh
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=2 \
   CMD /opt/src/scripts/healthcheck.sh

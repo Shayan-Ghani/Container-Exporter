@@ -50,4 +50,4 @@ jobs:
         
       - name: check for metrics and overall api health
         run: |
-          bash ./healthcheck.sh
+          bash ./scripts/healthcheck-ci.sh
