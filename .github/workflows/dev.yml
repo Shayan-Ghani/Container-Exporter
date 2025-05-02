@@ -41,6 +41,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: check for docker sock
+      - name: deploy
         run: |
-          sudo ls /var/run/
+          docker compose -f container-exporter-local.yml up --build
+        
+      - name: check for health
+        run: |
+          bash ./healthcheck.sh
