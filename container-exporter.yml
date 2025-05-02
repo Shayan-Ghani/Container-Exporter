@@ -2,12 +2,10 @@ version: !!str 3.7
 
 services:
   cxp:
-    image: devopsteen/cxp:latest # use alpine tag for a lighter image
+    image: shayanghani/container-exporter:latest
     container_name: container-exporter
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 8000:8000
-    environment:
-      CONTAINER_EXPORTER_PORT: ${CONTAINER_EXPORTER_PORT}
     restart: always

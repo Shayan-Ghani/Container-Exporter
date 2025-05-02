@@ -12,10 +12,17 @@ WORKDIR /opt/src
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY . .
 
-CMD "./start.sh" $CONTAINER_EXPORTER_PORT
+RUN chmod +x /opt/src/healthcheck.sh
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=2 \
+  CMD /opt/src/scripts/healthcheck.sh
+
+CMD "./start.sh"
 
 
