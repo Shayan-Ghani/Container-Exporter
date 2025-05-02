@@ -3,8 +3,8 @@ name: CI
 on:
   push:
     branches:
-      - master
-  pull_request:
+      - ci
+  # pull_request:
 
 permissions:
   contents: write
@@ -12,20 +12,30 @@ permissions:
   
 jobs:
   
-  build:
-    name: Build
+  docker-build:
     runs-on: ubuntu-latest
     steps:
-      - 
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      -
-        id: build
-        name: Build
-        uses: docker/build-push-action@v6
+
+      - name: Login to GHCR
+        uses: docker/login-action@9780b0c
         with:
-          push: false
-          tags: ${{github.registry_addr}}/Container-Exporter:latest
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@4574d27
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b
+
+      - name: Build and push
+        uses: docker/build-push-action@c5f3f8e
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/container-exporter:latest
   
   # test:
     
@@ -44,18 +54,13 @@ jobs:
           default_bump: patch
 
       - 
-        name: login to docker
-        uses: docker/login-action@v3
+        name: Login to GHCR
+        uses: docker/login-action@9780b0c
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}          
-      -
-        id: build
-        name: Build and Push the image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: devopsteen/cxp:${{ steps.bump.outputs.new_tag }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}     
+          
+
 
       - name: Create Release
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
