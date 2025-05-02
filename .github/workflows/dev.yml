@@ -46,7 +46,7 @@ jobs:
       
       - name: deploy
         run: |
-          docker compose -f ./container-exporter-local.yml up --build
+          docker compose -f ./container-exporter-local.yml up --build -d
         
       - name: check for health
         run: |
