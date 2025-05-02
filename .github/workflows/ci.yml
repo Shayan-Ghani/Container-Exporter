@@ -9,6 +9,9 @@ on:
 permissions:
   contents: write
   pull-requests: read
+
+env:
+  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:latest
   
 jobs:
   
@@ -34,7 +37,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/container-exporter:latest
+          tags: ${{env.ghcr_repo_addr}}
   
   # test:
     
