@@ -50,4 +50,7 @@ jobs:
         
       - name: check for health
         run: |
+          sleep 5
+          docker ps
+          bash -c "</dev/tcp/localhost/8000" || exit 1
           bash ./healthcheck.sh
