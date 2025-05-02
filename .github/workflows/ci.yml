@@ -2,9 +2,26 @@ name: CI
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
+      - 'extra/**'
+      - 'capture/**'
+      - 'ansible/**'
+      - 'dashboards/**'
+      - 'scripts/**'
+      - '.gitignore'
+      - 'LICENSE'
     branches:
-      - ci
-  # pull_request:
+      - master
+  pull_request:
+    paths-ignore:
+      - 'extra/**'
+      - 'capture/**'
+      - 'ansible/**'
+      - 'dashboards/**'
+      - 'scripts/**'
+      - '.gitignore'
+      - 'LICENSE'
 
 permissions:
   contents: write
@@ -32,7 +49,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
   
-      - name: Build and export to Docker
+      - name: Build and export to GHCR
         uses: docker/build-push-action@v6
         with:
           context: .
