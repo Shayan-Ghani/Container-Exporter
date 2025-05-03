@@ -11,14 +11,9 @@ on:
       - '.gitignore'
       - 'LICENSE'
 
-permissions:
-  contents: write
-  pull-requests: read
 
 env:
-  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:latest
-  docker_repo_addr: shayanghani/container-exporter:latest
-  docker_hub_user: shayanghani
+  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:${{github.action}}-${{github.run_id}}
   
 jobs:
   
@@ -52,9 +47,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            ${{env.ghcr_repo_addr}}
-            ${{env.docker_repo_addr}}
+          tags: ${{env.ghcr_repo_addr}}
 
 
 
