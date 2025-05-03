@@ -1,29 +1,38 @@
-name: CI
+name: CD
+
+## this workflow is for deployment to your actual servers which must be configured
+## in the runners section
 
 on:
-  push:
-    paths-ignore:
-      - '**.md'
-      - 'extra/**'
-      - 'capture/**'
-      - 'ansible/**'
-      - 'dashboards/**'
-      - 'scripts/**'
-      - '.gitignore'
-      - 'LICENSE'
-    branches:
-      - master
+    workflow_dispatch:
+      inputs:
+        environment:
+          description: 'Deployment environment'
+          required: true
+          default: 'dev'
+          type: choice
+          options:
+            - dev
+            - production
 
 env:
   ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:latest
   
 jobs:
+
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }} 
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
   

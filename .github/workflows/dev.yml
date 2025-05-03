@@ -1,7 +1,11 @@
-name: CI
+name: CI for development branches
 
 on:
   push:
+    branches-ignore:
+        - 'main'
+        - 'master'
+    
     paths-ignore:
       - '**.md'
       - 'extra/**'
@@ -11,9 +15,7 @@ on:
       - 'scripts/**'
       - '.gitignore'
       - 'LICENSE'
-    branches:
-      - dev
-      - ci
+      
   pull_request:
     paths-ignore:
       - 'extra/**'
