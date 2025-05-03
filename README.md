@@ -8,6 +8,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 3. [Step-by-Step Guide](#-step-by-step-guide)
    1. [Before You start](#before-you-start)
    2. [Getting started](#getting-started)
+      - [Deploy with Github Actions](#-deploy-with-github-actions)
       - [Deploy with Docker](#-deploy-with-docker)
       - [Deploy without Docker](#-cant-use-docker-ok-then-)
       - [Run with a Custom Port](#-run-with-a-custom-port)
@@ -35,8 +36,24 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 
 ### Getting started
 
+#### ⚙️ Deploy with Github Actions
+- fork the repository.
+- go to the fork repository and switch to `Action` tab.
+- click the `I understand my workflows, go ahead and enable them` button.
+- now you have access to all of the workflows, **however make sure you change the secrets listed below accordingly**:
+  1. `secretes.DOCKER_TOKEN` : the personal access token docker hub of your(or your organization) account.
+  2. `secretes.GHCR_TOKEN` : github classic access token with (packages read:write permissions) or just simply use `${{github.token}}`. [help](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+
+*here's how workflows work:*
+  - on push to `master` the project will be `built`, `deployed` and `released`.
+*since deploying to your servers requires runner configuration it must be triggered manually, you can modify its behavior on `cd.yml` workflow.*
+  - on push to any branch **except for** `master` code will be `built` and `healthchecked`
+  - on pr the project will be `healthchecked` and `built`.
+
+*double check the required variables and secrets to prevent any unexpected failures*
+
 #### 🐳 Deploy with Docker
-- clone and enter the repository using the following commands:
+- clone and checkout to the repository using the following commands:
 ```bash
   git clone https://github.com/Shayan-Ghani/Container-exporter.git
   cd Container-Exporter
@@ -53,7 +70,6 @@ see a sample of the metrics page in [here](./extra/metrics.txt).
 # build from base with Dockerfile
   docker-compose -f container-exporter-local.yml up --build -d
 ```
-*alternatively, run `docker-compose -f container-exporter-local.yml up --build -d` to build from Dockerfile*
 
 #### 🐍 Can't use Docker? Ok then :
 ```bash
@@ -83,12 +99,10 @@ Replace `<PID>` with the pid of ./start.sh script.
 
 #### 🚢 Run With A Custom Port:
 ```bash
-./start.sh <your custome port> &  
-# or 
-CONTAINER_EXPORTER_PORT=<your custom port> docker-compose -f container-exporter.yml up -d
+./start.sh <your custome port> &
 ```
 
-Change `<your custom port>` with a port of your choice and **make sure you change the port mapping in docker-compose accordingly.**
+Change `<your custom port>` with a port of your choice.
 
 ### 🔥 Add CXP to Prometheus
 - Edit your `prometheus.yml` file and add the address of container-exporter in scrape_configs:
@@ -128,4 +142,4 @@ Welcome to CXP! This project is currently in an experimental yet stable version,
 
 Feel free to contribute in any wacacy you can. If you come across a bug or have a suggestion, please don't hesitate to file an issue. Your input is valuable and helps us improve CXP for everyone; Therefore, add any desired function or feature to TO DO section. We appreciate your contribution to making CXP even better! If you have any questions or need assistance, feel free to reach out. Thank you!
 
-- If you want to add metrics to cxp, make sure the naming convention is conformed to. (`container_metric_name`)
+- If you want to add metrics to cxp, make sure the naming convention is conformed to. (`cxp_metric_name`)
