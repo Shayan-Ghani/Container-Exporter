@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'extra/**'
+      - 'capture/**'
+      - 'ansible/**'
+      - 'dashboards/**'
+      - 'scripts/**'
+      - '.gitignore'
+      - 'LICENSE'
+    branches:
+      - dev
+      - ci
+  pull_request:
+    paths-ignore:
+      - 'extra/**'
+      - 'capture/**'
+      - 'ansible/**'
+      - 'dashboards/**'
+      - 'scripts/**'
+      - '.gitignore'
+      - 'LICENSE'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+env:
+  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:latest
+  
+jobs:  
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+  
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: deploy
+        run: |
+          docker compose -f ./container-exporter-local.yml up --build -d
+        
+      - name: check for metrics and overall api health
+        run: |
+          bash ./scripts/healthcheck-ci.sh
