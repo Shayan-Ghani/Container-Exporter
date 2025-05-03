@@ -11,14 +11,9 @@ on:
       - '.gitignore'
       - 'LICENSE'
 
-permissions:
-  contents: write
-  pull-requests: read
 
 env:
-  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:latest
-  docker_repo_addr: shayanghani/container-exporter:latest
-  docker_hub_user: shayanghani
+  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:pr-${{github.run_id}}
   
 jobs:
   
@@ -27,12 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ env.docker_hub_user }}
-          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -52,9 +41,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            ${{env.ghcr_repo_addr}}
-            ${{env.docker_repo_addr}}
+          tags: ${{env.ghcr_repo_addr}}
 
 
 

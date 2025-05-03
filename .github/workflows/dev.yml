@@ -1,4 +1,4 @@
-name: CI for development branches
+name: CI-development
 
 on:
   push:
@@ -26,15 +26,12 @@ on:
       - '.gitignore'
       - 'LICENSE'
 
-permissions:
-  contents: write
-  pull-requests: read
 
 env:
-  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:latest
+  ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:${{github.action}}-${{github.run_id}}
   
 jobs:  
-  probe:
+  build-and-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
