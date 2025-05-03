@@ -29,7 +29,7 @@ permissions:
 
 env:
   ghcr_repo_addr: ghcr.io/shayan-ghani/container-exporter:latest
-  docker_hub_addr: shayanghani/container-exporter:latest
+  docker_repo_addr: shayanghani/container-exporter:latest
   docker_hub_user: shayanghani
   
 jobs:
