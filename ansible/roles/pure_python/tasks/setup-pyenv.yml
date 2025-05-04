@@ -1,0 +1,49 @@
+- name: SetUp pyenv for python 3.10 and venv
+  hosts: node003
+  vars_files:
+    - "vars.yml"
+  tasks:
+    - name: check if pyenv is installed
+      command: 
+        cmd: pyenv --version
+      environment:
+        PATH: "{{PATH}}"
+      register: is_pyenv
+
+    - name: install pyenv
+      command: curl https://pyenv.run | bash
+      when: is_pyenv.rc != 0
+
+    
+    - name: add pyenv to path
+      shell: |
+        echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc \
+        echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc \
+        echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+      when: is_pyenv.rc != 0
+
+    
+    - name: Install required libraries
+      become: true
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop: "{{required_packages}}"
+      when: ansible_os_family == 'Debian'
+
+    - name: Install python3.10
+      command: pyenv install "{{py_version | default('3.10.12')}}"
+      environment:
+        http_proxy: "{{proxy}}"
+        https_proxy: "{{proxy}}"
+        HTTP_PROXY: "{{proxy}}"
+        HTTPS_PROXY: "{{proxy}}"
+        PATH: "{{PYENV_PATH}}"
+      
+
+    - name: make the py version default for the system
+      command: pyenv global "{{py_version | default('3.10.12')}}"
+      environment:
+        PATH: "{{PYENV_PATH}}"
+

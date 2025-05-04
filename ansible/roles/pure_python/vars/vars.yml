@@ -1,0 +1,42 @@
+base_dir: "{{playbook_dir | dirname }}"
+dest_dir: "/home/ubuntu"
+target_dir: "{{dest_dir}}/Prometheus"
+compose_file: "{{target_dir}}/docker/prometheus.yml"
+container_name: prometheus
+restart_policy: '{{ lookup("env", "RESTART") }}'
+
+# cxp
+repo_path: "{{target_dir}}/container-exporter"
+repo_addr: "https://github.com/Shayan-Ghani/Container-Exporter.git"
+compose_file: "{{repo_path}}/container-exporter-local.yml"
+packages:
+  - python3-pip
+  - python3-venv
+
+# pyenv
+no_pyenv: false
+venv_name: "venv-cxp"
+py_version: "3.10.12"
+pyvenv_path: "{{ansible_facts['env']['HOME'] }}/.pyenv/versions/{{ venv_name }}"
+PATH: "/home/{{ ansible_user }}/.pyenv/bin:/home/{{ ansible_user }}/.pyenv/shims:{{ ansible_facts.env.PATH }}"
+proxy: "lookup('env', 'HTTP_PROXY')"
+
+required_packages:
+  - make
+  - build-essential
+  - libssl-dev
+  - zlib1g-dev
+  - libbz2-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - wget
+  - curl
+  - llvm
+  - libncursesw5-dev
+  - xz-utils
+  - tk-dev
+  - libxml2-dev
+  - libxmlsec1-dev
+  - libffi-dev
+  - liblzma-dev
+

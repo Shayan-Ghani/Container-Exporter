@@ -1,0 +1,21 @@
+- name: Get container_exporter processes
+  shell: "ps -ef | grep -v grep | grep -w container_exporter | awk '{print $2}'"
+  register: running_processes
+
+- name: Kill container_exporter
+  shell: "kill {{ item }}"
+  ignore_errors: true
+  with_items: "{{ running_processes.stdout_lines }}"
+
+- name : Waiting until all container_exporter is killed
+  wait_for:
+    path: "/proc/{{ item }}/status"
+    state: absent
+  with_items: "{{ running_processes.stdout_lines }}"
+  ignore_errors: yes
+  register: killed_processes
+
+- name: Force kill container_exporter processes
+  shell: "kill -9 {{ item }}"
+  with_items: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
+  when: killed_processes.failed
