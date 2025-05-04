@@ -20,3 +20,13 @@ Version : 1.1.1
 - `cxp_disk_io_write_bytes_total`: Total number of bytes written to disk.
 - `cxp_network_rx_bytes_total`: Total number of bytes received over the network
 - `cxp_network_tx_bytes_total`: Total number of bytes transmitted over the network
+
+# ChangeLog for CXP
+
+Version : 1.1.2-1.1.4
+
+## Key points
+- added Github actions deployment option
+- this version makes the code more flexible against vunlerable dependency risks PRs.
+
+**check out README.MD, Deploy with Github Actions to make use of the new changes.**
