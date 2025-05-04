@@ -27,6 +27,6 @@ Version : 1.1.2-1.1.4
 
 ## Key points
 - added Github actions deployment option
-- this version makes the code more flexible against vunlerable dependency risks PRs.
+- this version makes the code more flexible against vulnerability dependency risks PRs.
 
 **check out README.MD, Deploy with Github Actions to make use of the new changes.**
