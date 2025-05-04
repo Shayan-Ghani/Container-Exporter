@@ -26,4 +26,4 @@ websocket-client==1.6.2
 werkzeug>=2.3.8
 yarl==1.9.2
 zipp==3.16.2
-pip==22.0.2
+pip==23.3
