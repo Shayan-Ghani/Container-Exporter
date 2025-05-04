@@ -11,6 +11,7 @@ on:
         - 'scripts/**'
         - '.gitignore'
         - 'LICENSE'
+        - '.github/workflows/**'
       branches:
         - master
 
