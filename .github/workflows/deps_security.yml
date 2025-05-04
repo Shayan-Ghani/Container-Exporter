@@ -32,7 +32,10 @@ jobs:
           pip install pip-audit
           pip-audit || true  
 
-      - name: Deploy cxp
+      - name: Set up Docker Buildx To Have A Dummy Container
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Deploy CXP
         run: |
           bash ./start.sh &
           sleep 5
