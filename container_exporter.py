@@ -46,17 +46,20 @@ def update_container_status(containers):
 
 async def container_stats():
     docker = Docker()
-    containers = await docker.containers.list()
-    tasks = [stat.get_container_stats(container) for container in containers]
-    all_stats = await gather(*tasks)
-    for stats in all_stats:
-        container_cpu_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_cpu_percentage(stats[0]))
-        container_memory_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_percentage(stats[0]))        
-        container_memory_bytes_total.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_bytes(stats[0]))       
-        disk_io_read_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[0])
-        disk_io_write_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[1])
-        network_rx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[0])
-        network_tx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[1])
+    try:
+        containers = await docker.containers.list()
+        tasks = [stat.get_container_stats(container) for container in containers]
+        all_stats = await gather(*tasks)
+        for stats in all_stats:
+            container_cpu_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_cpu_percentage(stats[0]))
+            container_memory_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_percentage(stats[0]))        
+            container_memory_bytes_total.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_bytes(stats[0]))       
+            disk_io_read_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[0])
+            disk_io_write_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[1])
+            network_rx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[0])
+            network_tx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[1])
+    finally:
+        await docker.close()
 
 metrics_names = [container_cpu_percentage,  container_memory_percentage ,  container_memory_bytes_total , disk_io_read_counter , disk_io_write_counter , network_rx_counter ,  network_tx_counter ] 
 
