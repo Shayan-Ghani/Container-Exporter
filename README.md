@@ -24,7 +24,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 see a sample of the metrics page in [here](./extra/metrics.txt).
 
 ## 🎥 DEMO
-<img src="./capture/CXP-DEMO.gif" width="100%" height="50%" />
+<img src="https://shayan-ghani.github.io/Container-Exporter/CXP-DEMO.gif" width="100%" height="50%" />
 
 
 ## 📋 Step-by-Step Guide
