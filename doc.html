@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🚀 Container Exporter (CXP) Docs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding: 2rem; background-color: #f9f9f9; }
+    h1, h2, h3, h4 { margin-top: 2rem; }
+    pre, code { background: #f1f1f1; padding: .75rem; display: block; border-radius: 5px; overflow-x: auto; }
+    img { max-width: 100%; height: auto; margin: 1rem 0; }
+    a { word-break: break-all; }
+    .badge { margin-right: .5rem; }
+  </style>
+</head>
+<body class="container">
+
+  <h1>🚀 Container Exporter (CXP)</h1>
+  <p>A resource-friendly, highly efficient, and minimal Prometheus exporter to track Memory, CPU, Disk and Network I/O usage of Docker containers along with their lifecycle (uptime).</p>
+
+  <h2>📚 Table of Contents</h2>
+  <ol>
+    <li><a href="#dev-stack">DEV STACK</a></li>
+    <li><a href="#demo">DEMO</a></li>
+    <li><a href="#guide">Step-by-Step Guide</a></li>
+    <li><a href="#grafana">Grafana Dashboards</a></li>
+    <li><a href="#todo">TO-DO</a></li>
+    <li><a href="#contributions">Contributions</a></li>
+  </ol>
+
+  <div class="section" id="dev-stack">
+    <h2>🛠️ DEV STACK</h2>
+    <p class="badge">
+      <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54">
+      <img src="https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=ffdd54">
+      <img src="https://img.shields.io/badge/docker-3670A0?style=for-the-badge&logo=docker&logoColor=ffff">
+      <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white">
+      <img src="https://img.shields.io/badge/gunicorn-%298729.svg?style=for-the-badge&logo=gunicorn&logoColor=white">
+    </p>
+    <p>See a sample of the metrics page <a href="./extra/metrics.txt">here</a>.</p>
+  </div>
+
+  <h2 id="demo">🎥 DEMO</h2>
+  <img src="https://shayan-ghani.github.io/Container-Exporter/CXP-DEMO.gif" alt="Demo GIF">
+
+  <h2 id="guide">📋 Step-by-Step Guide</h2>
+
+  <h3>Before You start</h3>
+  <ul>
+    <li>Port 8000 must be open</li>
+    <li>Docker & Docker Compose should be installed (optional)</li>
+    <li>The presence of Git and Python => 3.10</li>
+  </ul>
+
+  <h3>Deploy with Github Actions</h3>
+  <p>Fork, enable workflows, set secrets:</p>
+  <ul>
+    <li><code>secretes.DOCKER_TOKEN</code></li>
+    <li><code>secretes.GHCR_TOKEN</code></li>
+  </ul>
+  <p>Workflows on push to <code>master</code> will deploy and release; on other branches only build/healthcheck.</p>
+
+  <h3>Deploy with Docker</h3>
+  <pre><code>git clone https://github.com/Shayan-Ghani/Container-exporter.git
+cd Container-Exporter
+chmod +x ./start.sh
+docker-compose -f container-exporter.yml up -d</code></pre>
+
+  <h3>Can't use Docker? Ok then:</h3>
+  <pre><code>python3 -m venv venv
+source venv/bin/activate
+pip install -U pip
+pip install -r requirements.txt
+./start.sh &</code></pre>
+
+  <h3>Run with a Custom Port:</h3>
+  <pre><code>./start.sh &lt;your custom port&gt; &</code></pre>
+
+  <h3>Add CXP to Prometheus</h3>
+  <p>Edit your prometheus.yml file and add the address of container-exporter in scrape_configs: </p>
+      <img src="./scrape-config.png" alt="">
+    <p>Restart/Reload Prometheus. Visit: <code>http://127.0.0.1:8000/metrics</code>.</p>
+  <h2 id="grafana">📊 Grafana Dashboards</h2>
+  <p>Import dashboards from <code>./dashboards</code> directory and replace your datasource UID. Use <code>dashboard-gen.sh</code> to automate UID replacement.</p>
+
+  <h2 id="todo">TO-DO</h2>
+  <ul>
+    <li>✅ Disk I/O usage</li>
+    <li>✅ Network I/O usage</li>
+    <li>✅ Add metrics in bytes</li>
+    <li>✅ Clean up metrics for dead containers</li>
+    <li>🚧 Publish Grafana dashboards</li>
+    <li>🚧 Build a proper static website</li>
+  </ul>
+
+  <h2 id="contributions">Contributions</h2>
+  <p>Open for pull requests and issues! Help shape CXP by adding features, fixing bugs or improving docs.</p>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
