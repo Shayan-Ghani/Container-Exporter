@@ -1,32 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Container Exporter Demo</title>
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #0e0e0e;
-      color: #f0f0f0;
-      font-family: sans-serif;
-      margin: 0;
-      height: 100vh;
-      justify-content: center;
-    }
-    img {
-      max-width: 90%;
-      border: 3px solid #444;
-      border-radius: 8px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Container Exporter for Prometheus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background-color: #0d0d0d;
+            font-family: "Source Code Pro", monospace;;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            color: #fafafa;
+        }
+
+        /* Subtle animated background */
+        .background {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, #222 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: moveBackground 20s linear infinite;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(-50px, -50px);
+            }
+        }
+
+        .container {
+            text-align: center;
+            padding: 4rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 40px rgba(255, 69, 0, 0.2);
+            border-radius: 16px;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #FF5722;
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            line-height: 1.8rem;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .link-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            background-color: #FF5722;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .link-btn:hover {
+            background-color: #e64a19;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Container Exporter GIF Demo</h1>
-  <img src="CXP-DEMO.gif" alt="Container Exporter Demo">
+    <div class="background"></div>
+    <div class="container">
+        <h1>CXP</h1>
+        <p>Your reliable Docker container exporter for Prometheus monitoring in production-grade systems.</p>
+        <div class="links">
+            <a href="./metrics.html"
+                class="link-btn"> View Sample Metrics</a>
+            <a href="./doc.html" class="link-btn">Documentation</a>
+        </div>
+        <div class="footer">
+            Built for reliability. Inspired by Prometheus.
+        </div>
+    </div>
+
 </body>
+
+
 </html>
