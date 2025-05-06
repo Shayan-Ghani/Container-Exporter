@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CXP Metrics Exporter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>📊 CXP Prometheus Metrics</h1>
+
+    <div class="section">
+      <h2>Container Exporter Output</h2>
+      <pre class="metrics">
+        # HELP cxp_container_status Docker container status (1 = running, 0 = not running)
+        # TYPE cxp_container_status gauge
+        cxp_container_status{container_name="mysql"} 1.0
+        cxp_container_status{container_name="nginx"} 0.0
+        cxp_container_status{container_name="redis"} 1.0
+        
+        # HELP cxp_cpu_percentage Docker container cpu usage
+        # TYPE cxp_cpu_percentage gauge
+        cxp_cpu_percentage{container_name="mysql"} 0.828252974326863
+        cxp_cpu_percentage{container_name="nginx"} 0.56
+        cxp_cpu_percentage{container_name="redis"} 0.72
+        
+        # HELP cxp_memory_percentage Docker container memory usage in percent
+        # TYPE cxp_memory_percentage gauge
+        cxp_memory_percentage{container_name="mysql"} 8.620524568196576
+        cxp_memory_percentage{container_name="nginx"} 5.12
+        cxp_memory_percentage{container_name="redis"} 6.75
+        
+        # HELP cxp_memory_bytes_total Docker container memory usage in bytes
+        # TYPE cxp_memory_bytes_total gauge
+        cxp_memory_bytes_total{container_name="mysql"} 1.41975552e+09
+        cxp_memory_bytes_total{container_name="nginx"} 1.0948608e+08
+        cxp_memory_bytes_total{container_name="redis"} 1.34217728e+08
+        
+        # HELP cxp_disk_io_read_bytes_total Total number of bytes read from disk
+        # TYPE cxp_disk_io_read_bytes_total counter
+        cxp_disk_io_read_bytes_total{container_name="mysql"} 110039040
+        cxp_disk_io_read_bytes_total{container_name="nginx"} 12582912
+        cxp_disk_io_read_bytes_total{container_name="redis"} 4194304
+        
+        # HELP cxp_disk_io_read_bytes_created Total number of bytes read from disk
+        # TYPE cxp_disk_io_read_bytes_created gauge
+        cxp_disk_io_read_bytes_created{container_name="mysql"} 1.717319005441369e+09
+        cxp_disk_io_read_bytes_created{container_name="nginx"} 1.7173190054415000e+09
+        cxp_disk_io_read_bytes_created{container_name="redis"} 1.7173190054416000e+09
+        
+        # HELP cxp_disk_io_write_bytes_total Total number of bytes written to disk
+        # TYPE cxp_disk_io_write_bytes_total counter
+        cxp_disk_io_write_bytes_total{container_name="mysql"} 17113088
+        cxp_disk_io_write_bytes_total{container_name="nginx"} 3145728
+        cxp_disk_io_write_bytes_total{container_name="redis"} 2097152
+        
+        # HELP cxp_disk_io_write_bytes_created Total number of bytes written to disk
+        # TYPE cxp_disk_io_write_bytes_created gauge
+        cxp_disk_io_write_bytes_created{container_name="mysql"} 1.7173190054414008e+09
+        cxp_disk_io_write_bytes_created{container_name="nginx"} 1.7173190054415300e+09
+        cxp_disk_io_write_bytes_created{container_name="redis"} 1.7173190054416300e+09
+        
+        # HELP cxp_network_rx_bytes_total Total number of bytes received over the network
+        # TYPE cxp_network_rx_bytes_total counter
+        cxp_network_rx_bytes_total{container_name="mysql"} 25217.0
+        cxp_network_rx_bytes_total{container_name="nginx"} 122880
+        cxp_network_rx_bytes_total{container_name="redis"} 98304
+        
+        # HELP cxp_network_rx_bytes_created Total number of bytes received over the network
+        # TYPE cxp_network_rx_bytes_created gauge
+        cxp_network_rx_bytes_created{container_name="mysql"} 1.7173190054414217e+09
+        cxp_network_rx_bytes_created{container_name="nginx"} 1.7173190054415500e+09
+        cxp_network_rx_bytes_created{container_name="redis"} 1.7173190054416500e+09
+        
+        # HELP cxp_network_tx_bytes_total Total number of bytes transmitted over the network
+        # TYPE cxp_network_tx_bytes_total counter
+        cxp_network_tx_bytes_total{container_name="mysql"} 0.0
+        cxp_network_tx_bytes_total{container_name="nginx"} 92160
+        cxp_network_tx_bytes_total{container_name="redis"} 57344
+        
+        # HELP cxp_network_tx_bytes_created Total number of bytes transmitted over the network
+        # TYPE cxp_network_tx_bytes_created gauge
+        cxp_network_tx_bytes_created{container_name="mysql"} 1.717319005441443e+09
+        cxp_network_tx_bytes_created{container_name="nginx"} 1.7173190054415700e+09
+        cxp_network_tx_bytes_created{container_name="redis"} 1.7173190054416700e+09
+        
+      </pre>
+    </div>
+
+    <div class="section">
+      <h2>🪶 Container Metrics Samples</h2>
+      <div class="card-grid">
+
+        <div class="card">
+          <h3>📦 mysql</h3>
+          <p><strong>Status:</strong> <code>Running (1)</code></p>
+          <p><strong>CPU Usage:</strong> <code>0.82%</code></p>
+          <p><strong>Memory Usage:</strong> <code>8.62%</code></p>
+          <p><strong>Disk Read:</strong> <code>110 MB</code></p>
+          <p><strong>Disk Write:</strong> <code>17 MB</code></p>
+          <p><strong>Network RX:</strong> <code>25 KB</code></p>
+          <p><strong>Network TX:</strong> <code>0 KB</code></p>
+        </div>
+
+        <div class="card">
+          <h3>📦 nginx</h3>
+          <p><strong>Status:</strong> <code>exited (0)</code></p>
+          <p><strong>CPU Usage:</strong> <code>0.56%</code></p>
+          <p><strong>Memory Usage:</strong> <code>5.12%</code></p>
+          <p><strong>Disk Read:</strong> <code>12 MB</code></p>
+          <p><strong>Disk Write:</strong> <code>3 MB</code></p>
+          <p><strong>Network RX:</strong> <code>120 KB</code></p>
+          <p><strong>Network TX:</strong> <code>90 KB</code></p>
+        </div>
+
+        <div class="card">
+          <h3>📦 Redis </h3>
+          <p><strong>Status:</strong> <code>running (1)</code></p>
+          <p><strong>CPU Usage:</strong> <code>0.72%</code></p>
+          <p><strong>Memory Usage:</strong> <code>6.75% (128 MB)</code></p>
+          <p><strong>Disk Read:</strong> <code>4 MB</code></p>
+          <p><strong>Disk Write:</strong> <code>2 MB</code></p>
+          <p><strong>Network RX:</strong> <code>96 KB</code></p>
+          <p><strong>Network TX:</strong> <code>56 KB</code></p>
+        </div>
+        
+
+      </div>
+    </div>
+ <div class="section">
+      <h2>Container Exporter Output After <strong>Nginx</strong> is exited</h2>
+      <pre class="metrics">
+        # HELP cxp_container_status Docker container status (1 = running, 0 = not running)
+        # TYPE cxp_container_status gauge
+        cxp_container_status{container_name="mysql"} 1.0
+        cxp_container_status{container_name="nginx"} 0.0
+        cxp_container_status{container_name="redis"} 1.0
+        
+        # HELP cxp_cpu_percentage Docker container cpu usage
+        # TYPE cxp_cpu_percentage gauge
+        cxp_cpu_percentage{container_name="mysql"} 0.828252974326863
+        cxp_cpu_percentage{container_name="redis"} 0.72
+
+        ... < existing metrics >
+      </pre>
+      <p>All the stats for nginx are removed but <code>cxp_container_status</code> is still there to send alerts.</p>
+  </div>
+
+</body>
+</html>

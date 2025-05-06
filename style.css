@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
+body {
+  background: #0e0e0e;
+  color: #e0e0e0;
+  font-family: 'Fira Code', monospace;
+  margin: 0;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+h1, h2, h3 {
+  color: #fafafa;
+  margin-bottom: 1rem;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.metrics {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: pre;
+  color: #d0d0d0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid #333;
+}
+
+code {
+  background: #111;
+  color: #f0f0f0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.card {
+  background: #1c1c1c;
+  padding: 1rem;
+  border-radius: 12px;
+  flex: 1 1 280px;
+  border: 1px solid #333;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  background: #222;
+  transform: translateY(-2px);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #fafafa;
+}
+
+.card p {
+  margin: 0.5rem 0;
+}
