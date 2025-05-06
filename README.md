@@ -2,6 +2,8 @@
 
 A resource-friendly, highly efficient, and minimal Prometheus exporter to track Memory, CPU, Disk and Network I/O usage of Docker containers along with their lifecycle (uptime).
 
+Check out the [web page](https://shayan-ghani.github.io/Container-Exporter/) for more information. 
+
 ## Table of Contents
 1. [DEV STACK](#%EF%B8%8F-dev-stack)
 2. [DEMO](#-demo)
@@ -21,7 +23,7 @@ A resource-friendly, highly efficient, and minimal Prometheus exporter to track 
 ## 🛠️ DEV STACK
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=ffdd54) ![Docker](https://img.shields.io/badge/docker-3670A0?style=for-the-badge&logo=docker&logoColor=ffff) ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white) ![Gunicorn](https://img.shields.io/badge/gunicorn-%298729.svg?style=for-the-badge&logo=gunicorn&logoColor=white)
 
-see a sample of the metrics page in [here](./extra/metrics.txt).
+see a sample of the metrics page [here](https://shayan-ghani.github.io/Container-Exporter/metrics.html).
 
 ## 🎥 DEMO
 <img src="https://shayan-ghani.github.io/Container-Exporter/CXP-DEMO.gif" width="100%" height="50%" />
