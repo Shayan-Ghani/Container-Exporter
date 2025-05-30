@@ -1,6 +1,6 @@
 # 🚀 Container Exporter (CXP)
 
-A resource-friendly, highly efficient, and minimal Prometheus exporter to track Memory, CPU, Disk and Network I/O usage of Docker containers along with their lifecycle (uptime).
+A resource-friendly, highly efficient, and minimal Prometheus exporter to track Memory, CPU, Disk and Network I/O usage of Docker containers along with their lifecycle (up/down) state used for alerting.
 
 Check out the [web page](https://shayan-ghani.github.io/Container-Exporter/) for more information. 
 
@@ -21,12 +21,12 @@ Check out the [web page](https://shayan-ghani.github.io/Container-Exporter/) for
 7. [Contact Information](#contact-information)
 
 ## 🛠️ DEV STACK
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=ffdd54) ![Docker](https://img.shields.io/badge/docker-3670A0?style=for-the-badge&logo=docker&logoColor=ffff) ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white) ![Gunicorn](https://img.shields.io/badge/gunicorn-%298729.svg?style=for-the-badge&logo=gunicorn&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Flask](https://img.shields.io/badge/fastapi-%23000.svg?style=for-the-badge&logo=fastapi&logoColor=ffdd54) ![Docker](https://img.shields.io/badge/docker-3670A0?style=for-the-badge&logo=docker&logoColor=ffff) ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white) ![Uvicorn](https://img.shields.io/badge/uvicorn-%298729.svg?style=for-the-badge&logo=uvicorn&logoColor=white)
 
 see a sample of the metrics page [here](https://shayan-ghani.github.io/Container-Exporter/metrics.html).
 
 ## 🎥 DEMO
-<img src="https://shayan-ghani.github.io/Container-Exporter/CXP-DEMO.gif" width="100%" height="50%" />
+<img src="https://github.com/Shayan-Ghani/Container-Exporter/blob/media/capture/CXP-DEMO.gif" width="100%" height="50%" />
 
 
 ## 📋 Step-by-Step Guide
@@ -115,7 +115,7 @@ PORT="8000" ./start.sh <your custome port> &
 ### 🔥 Add CXP to Prometheus
 - Edit your `prometheus.yml` file and add the address of container-exporter in scrape_configs:
 
-![Prometheus config](./capture/scrape-config.png "Prometheus configuration file")
+![Prometheus config](https://github.com/Shayan-Ghani/Container-Exporter/blob/media/capture/scrape-config.png "Prometheus configuration file")
 
 - Reload or restart your Prometheus server and reach out to `http://127.0.0.1:8000/metrics`
 ### That is it you are good to go, Enjoy Using CXP! "}"
@@ -143,10 +143,13 @@ Check out [dashboards](./dashboards) directory for Json files. including CPU & M
  - [x]  Network I/O Usage
  - [x]  Add metrics in units of byte
  - [x]  Check and Unregister *stat* metrics for containers that are not running
+ - [x]  Design and develop a static website to showcase Documentation, new features, etc.
  - [ ]  Design grafana dashboards and share them on grafana cloud
- - [ ]  Design and develop a static website to showcase Documentation, new features, etc.
+ - [ ]  Add unit tests
+ - [ ]  Add `clear_metrics` functionality to switch on clearing the labels or setting them to 0 to maintain time series data, on user's demand.
+
 ## Contributions
-Welcome to CXP! This project is currently in an experimental yet stable version, and we encourage contributions to enhance its functionality, optimize code, and add new features
+Welcome to CXP! This project is production-ready now, and we encourage contributions to enhance its functionality, optimize code, and add new features
 
 Feel free to contribute in any wacacy you can. If you come across a bug or have a suggestion, please don't hesitate to file an issue. Your input is valuable and helps us improve CXP for everyone; Therefore, add any desired function or feature to TO DO section. We appreciate your contribution to making CXP even better! If you have any questions or need assistance, feel free to reach out. Thank you!
 
