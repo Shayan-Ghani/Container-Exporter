@@ -104,7 +104,7 @@ Replace `<PID>` with the pid of ./start.sh script.
 - adjust the following settings for `uvicorn` as environment variables:
   - HOST (Default: 0.0.0.0)
   - PORT (Default: 8000)
-  - WORKERS (Default : 3)
+  - WORKERS (Default : 1)
   - LOG_LEVEL (Default : warning)
 
 Example:
@@ -145,9 +145,9 @@ Check out [dashboards](./dashboards) directory for Json files. including CPU & M
  - [x]  Check and Unregister *stat* metrics for containers that are not running
  - [x]  Design and develop a static website to showcase Documentation, new features, etc.
 -  [x] Enable functionality and smoke testing in ci
+ - [X]  Add `clear_metrics` functionality to switch on clearing the labels or setting them to 0 to maintain time series data, on user's demand.
  - [ ]  Design grafana dashboards and share them on grafana cloud
  - [ ]  Add unit tests
- - [ ]  Add `clear_metrics` functionality to switch on clearing the labels or setting them to 0 to maintain time series data, on user's demand.
 
 ## Contributions
 Welcome to CXP! This project is production-ready now, and we encourage contributions to enhance its functionality, optimize code, and add new features

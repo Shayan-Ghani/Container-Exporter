@@ -9,6 +9,7 @@ from fastapi.responses import PlainTextResponse
 from contextlib import asynccontextmanager
 from utils.metrics import PromMetric, prune_stale_metrics, flush_metric_labels
 from logging import basicConfig, error, ERROR
+from settings.settings import settings
 
 docker_client: Docker
 
@@ -16,6 +17,8 @@ docker_client: Docker
 async def lifespan(app: FastAPI):
     global docker_client
     docker_client = Docker()
+    
+    print("clear metric val:", settings.CONTAINER_EXPORTER_CLEAR_METRICS)
     
     yield
 

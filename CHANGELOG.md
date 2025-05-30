@@ -17,7 +17,7 @@
 - adjust the following settings for `uvicorn` as environment variables:
   - HOST
   - PORT
-  - WORKERS (Default : 3)
+  - WORKERS (Default : 1)
   - LOG_LEVEL=(Default : warning)
 
 ⚠️ **Breaking operational change:** if your deployment or runtime environment specifically depends on Flask or Gunicorn, you'll need to adjust service definitions accordingly.

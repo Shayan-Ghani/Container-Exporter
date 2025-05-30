@@ -3,7 +3,7 @@
 # Configurable variables
 HOST=${HOST:-0.0.0.0}
 PORT=${PORT:-8000}
-WORKERS=${WORKERS:-3}
+WORKERS=${WORKERS:-1}
 LOG_LEVEL=${LOG_LEVEL:-warning}
 
 echo "Starting Container Exporter..."
