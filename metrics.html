@@ -13,7 +13,7 @@
     <div class="section">
       <h2>Container Exporter Output</h2>
       <pre class="metrics">
-        # HELP cxp_container_status Docker container status (1 = running, 0 = not running)
+        # HELP cxp_container_status Docker container status (0 = not running, 1 = running, 2 = restarting/unhealthy)
         # TYPE cxp_container_status gauge
         cxp_container_status{container_name="mysql"} 1.0
         cxp_container_status{container_name="nginx"} 0.0
@@ -131,7 +131,7 @@
  <div class="section">
       <h2>Container Exporter Output After <strong>Nginx</strong> is exited</h2>
       <pre class="metrics">
-        # HELP cxp_container_status Docker container status (1 = running, 0 = not running)
+        # HELP cxp_container_status Docker container status (0 = not running, 1 = running, 2 = restarting/unhealthy)
         # TYPE cxp_container_status gauge
         cxp_container_status{container_name="mysql"} 1.0
         cxp_container_status{container_name="nginx"} 0.0
