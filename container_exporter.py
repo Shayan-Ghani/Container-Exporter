@@ -1,4 +1,3 @@
-from asyncio import gather
 from aiodocker import Docker
 from aiodocker.containers import DockerContainer
 from stats import get_docker_stats as stat
@@ -9,6 +8,7 @@ from fastapi.responses import PlainTextResponse
 from contextlib import asynccontextmanager
 from utils.metrics import PromMetric, prune_stale_metrics, flush_metric_labels
 from logging import basicConfig, error, ERROR
+from settings.settings import settings
 
 docker_client: Docker
 
@@ -16,14 +16,14 @@ docker_client: Docker
 async def lifespan(app: FastAPI):
     global docker_client
     docker_client = Docker()
-    
+        
     yield
 
     await docker_client.close()
 
 app = FastAPI(lifespan=lifespan)
 
-gauge_container_status = Gauge('cxp_container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
+gauge_container_status = Gauge('cxp_container_status', 'Docker container status (0 = not running, 1 = running, 2 = restarting/unhealthy)', ['container_name'])
 gauge_cpu_percentage = Gauge('cxp_cpu_percentage', 'Docker container CPU usage', ['container_name'])
 gauge_memory_percentage = Gauge('cxp_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
 gauge_memory_bytes = Gauge('cxp_memory_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
@@ -42,15 +42,12 @@ async def get_containers(all=False) -> list[DockerContainer]:
     return await docker_client.containers.list(all=all)
 
 def update_container_status(running_containers:list[DockerContainer]):
-    
-    current_names = [c._container.get("Names")[0][1:] for c in running_containers]
-    for name in current_names:            
-        gauge_container_status.labels(container_name=name).set(1)
+    for c in running_containers:
+        gauge_container_status.labels(container_name=c._container.get("Names")[0][1:]).set(1 if c._container.get('State') == 'running' else 2)
 
 # Async metrics gathering
 async def container_stats( running_containers: list[DockerContainer]):
-    tasks = [stat.get_container_stats(container) for container in running_containers]
-    all_stats = await gather(*tasks)
+    all_stats = await stat.get_containers_stats(running_containers)
     
     for stats in all_stats:
         name = stats[0]['name'][1:]

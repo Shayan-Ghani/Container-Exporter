@@ -31,6 +31,8 @@ log "Starting CI Healthcheck..."
 log "Spinning up test container: $container_name"
 docker run -d --name "$container_name" alpine sleep 60 >/dev/null || fail "Failed to start container"
 
+sleep 3
+
 log "Checking root endpoint..."
 if curl --silent --fail http://localhost:8000/ > "${log_dir}/index.txt"; then
   pass "Root endpoint responded successfully."

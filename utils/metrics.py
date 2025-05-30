@@ -1,7 +1,7 @@
 from aiodocker.containers import DockerContainer
 from typing import Union, Iterable
 from prometheus_client import Gauge, Counter
-
+from settings.settings import settings
 PromMetric = Union[Gauge, Counter]
 
 def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[PromMetric], persistent_metrics : list[PromMetric]):
@@ -15,8 +15,13 @@ def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[Prom
         for labels in metric._metrics:
             name = labels[0]
             if name not in active_set:
-                metric.clear()
-    
+                if settings.CONTAINER_EXPORTER_CLEAR_METRICS:
+                    metric.clear()                    
+                elif isinstance(metric, Gauge):
+                    metric.labels(container_name=name).set(0)
+                else:
+                    metric.clear()                    
+                        
     for metric in persistent_metrics:
         for labels in list(metric._metrics):
             name = labels[0]
