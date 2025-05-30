@@ -1,0 +1,60 @@
+groups:
+- name: container-status
+  rules:
+  - alert: ContainerDown
+    expr: cxp_container_status == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Container {{ $labels.container_name }} is down"
+      description: "No status heartbeat for container '{{ $labels.container_name }}' in the last 5 minutes."
+
+- name: container-resource-usage
+  rules:
+  - alert: HighCPUUsage
+    expr: avg_over_time(cxp_cpu_percentage[5m]) > 80.0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage on {{ $labels.container_name }}"
+      description: "CPU usage has averaged >80% for more than 5 minutes."
+
+  - alert: CriticalCPUUsage
+    expr: avg_over_time(cxp_cpu_percentage[5m]) > 90.0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Critical CPU usage on {{ $labels.container_name }}"
+      description: "CPU usage has averaged >90% for more than 5 minutes."
+
+  - alert: HighMemoryUsage
+    expr: avg_over_time(cxp_memory_percentage[5m]) > 80.0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High memory usage on {{ $labels.container_name }}"
+      description: "Memory usage has averaged >80% for more than 5 minutes."
+
+  - alert: CriticalMemoryUsage
+    expr: avg_over_time(cxp_memory_percentage[5m]) > 90.0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Critical memory usage on {{ $labels.container_name }}"
+      description: "Memory usage has averaged >90% for more than 5 minutes."
+
+- name: exporter-health
+  rules:
+  - alert: ExporterDown
+    expr: absent(cxp_container_status)
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Container exporter metrics missing"
+      description: "No cxp_container_status metric scraped for more than 5 minutes; exporter may be down or unreachable."
