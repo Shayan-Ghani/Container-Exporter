@@ -1,8 +1,12 @@
-def calculate_cpu_percentage(stats) -> float:
+from aiodocker.docker import DockerContainer
+
+def calculate_cpu_percentage(stats:dict) -> float:
     cpu_percent = 0
     
     cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
+
     system_delta = stats['cpu_stats']['system_cpu_usage'] - stats['precpu_stats']['system_cpu_usage']
+
     number_cpus = stats['cpu_stats']['online_cpus'] 
     if cpu_delta is not None and system_delta is not None and number_cpus is not None:
         cpu_percent = (cpu_delta / system_delta) * number_cpus * 100.0 
@@ -56,6 +60,6 @@ def calculate_network_io(stats) -> bytes:
 
     return network_rx_bytes, network_tx_bytes
 
-async def get_container_stats(container):
+async def get_container_stats(container:DockerContainer):
     stats = await container.stats(stream=False)
     return stats

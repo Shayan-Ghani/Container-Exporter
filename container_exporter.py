@@ -1,95 +1,100 @@
-from asyncio import gather, new_event_loop, wait
-from aiodocker import Docker 
-from docker import from_env as docker_env
+from asyncio import gather
+from aiodocker import Docker
+from aiodocker.containers import DockerContainer
 from stats import get_docker_stats as stat
-from prometheus_client import Gauge, Counter
+from prometheus_client import Gauge, Counter, CONTENT_TYPE_LATEST
 from prometheus_client.exposition import generate_latest
-from flask import Flask, Response, request
-from configs import config
+from fastapi import FastAPI
+from fastapi.responses import PlainTextResponse
+from contextlib import asynccontextmanager
+from utils.metrics import PromMetric, prune_stale_metrics, flush_metric_labels
+from logging import basicConfig, error, ERROR
 
-app = Flask(__name__)
+docker_client: Docker
 
-
-# Create Prometheus gauge metrics
-container_status = Gauge('cxp_container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
-container_cpu_percentage = Gauge('cxp_cpu_percentage', 'Docker container cpu usage', ['container_name'])
-container_memory_percentage = Gauge('cxp_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
-container_memory_bytes_total = Gauge('cxp_memory_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
-
-disk_io_read_counter = Counter("cxp_disk_io_read_bytes_total", "Total number of bytes read from disk", ['container_name'])
-disk_io_write_counter = Counter("cxp_disk_io_write_bytes_total", "Total number of bytes written to disk", ['container_name'])
-
-network_rx_counter = Counter("cxp_network_rx_bytes_total", "Total number of bytes received over the network", ['container_name'])
-network_tx_counter = Counter("cxp_network_tx_bytes_total", "Total number of bytes transmitted over the network", ['container_name'])
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global docker_client
+    docker_client = Docker()
     
+    yield
 
-# get the data for running or not running(unhealthy) containers
-def get_containers(all=False):
-    client = docker_env()
-    return client.containers.list(all)
+    await docker_client.close()
 
-init_containers_names = [c.name for c in get_containers()]
+app = FastAPI(lifespan=lifespan)
 
-# update container status whether they are running.
-def update_container_status(containers):
-    for container in containers:
-        if container.name in init_containers_names:
-            container_status.labels(container_name=container.name).set(1 if container.status == "running" else 0)
-        elif container.status == "running":
-            container_status.labels(container_name=container.name).set(1)
-            init_containers_names.append(container.name)
-            
-    for container_name in init_containers_names:
-        if container_name not in [c.name for c in containers]:
-            container_status.labels(container_name=container_name).set(0)    
+gauge_container_status = Gauge('cxp_container_status', 'Docker container status (1 = running, 0 = not running)', ['container_name'])
+gauge_cpu_percentage = Gauge('cxp_cpu_percentage', 'Docker container CPU usage', ['container_name'])
+gauge_memory_percentage = Gauge('cxp_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
+gauge_memory_bytes = Gauge('cxp_memory_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
+
+counter_disk_read = Counter("cxp_disk_io_read_bytes_total", "Total bytes read from disk", ['container_name'])
+counter_disk_write = Counter("cxp_disk_io_write_bytes_total", "Total bytes written to disk", ['container_name'])
+counter_net_rx = Counter("cxp_network_rx_bytes_total", "Total bytes received over network", ['container_name'])
+counter_net_tx = Counter("cxp_network_tx_bytes_total", "Total bytes sent over network", ['container_name'])
 
 
-async def container_stats():
-    docker = Docker()
+metrics_to_clear: list[PromMetric] = [gauge_cpu_percentage, gauge_memory_percentage, gauge_memory_bytes, counter_disk_read, counter_disk_write, counter_net_rx, counter_net_tx]
+
+
+
+async def get_containers(all=False) -> list[DockerContainer]:
+    return await docker_client.containers.list(all=all)
+
+def update_container_status(running_containers:list[DockerContainer]):
+    
+    current_names = [c._container.get("Names")[0][1:] for c in running_containers]
+    for name in current_names:            
+        gauge_container_status.labels(container_name=name).set(1)
+
+# Async metrics gathering
+async def container_stats( running_containers: list[DockerContainer]):
+    tasks = [stat.get_container_stats(container) for container in running_containers]
+    all_stats = await gather(*tasks)
+    
+    for stats in all_stats:
+        name = stats[0]['name'][1:]
+        gauge_cpu_percentage.labels(container_name=name).set(stat.calculate_cpu_percentage(stats[0]))
+        gauge_memory_percentage.labels(container_name=name).set(stat.calculate_memory_percentage(stats[0]))
+        gauge_memory_bytes.labels(container_name=name).set(stat.calculate_memory_bytes(stats[0]))
+        disk_read, disk_write = stat.calculate_disk_io(stats[0])
+        net_rx, net_tx = stat.calculate_network_io(stats[0])
+
+        counter_disk_read.labels(container_name=name).inc(disk_read)
+        counter_disk_write.labels(container_name=name).inc(disk_write)
+        counter_net_rx.labels(container_name=name).inc(net_rx)
+        counter_net_tx.labels(container_name=name).inc(net_tx)
+
+# List of metrics we want to prune (performance counters)
+prunable_metrics: list[PromMetric] = [
+    gauge_cpu_percentage, gauge_memory_percentage, gauge_memory_bytes,
+    counter_disk_read, counter_disk_write, counter_net_rx, counter_net_tx
+]
+
+# Metrics we want to always keep, and set to 0 instead
+persistent_metrics: list[PromMetric] = [gauge_container_status]
+
+
+@app.get("/")
+def root():
+    return {"message": "Welcome to CXP, Container Exporter for Prometheus."}
+
+@app.get("/metrics")
+async def metrics():
     try:
-        containers = await docker.containers.list()
-        tasks = [stat.get_container_stats(container) for container in containers]
-        all_stats = await gather(*tasks)
-        for stats in all_stats:
-            container_cpu_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_cpu_percentage(stats[0]))
-            container_memory_percentage.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_percentage(stats[0]))        
-            container_memory_bytes_total.labels(container_name=stats[0]['name'][1:]).set(stat.calculate_memory_bytes(stats[0]))       
-            disk_io_read_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[0])
-            disk_io_write_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_disk_io(stats[0])[1])
-            network_rx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[0])
-            network_tx_counter.labels(container_name=stats[0]['name'][1:]).inc(stat.calculate_network_io(stats[0])[1])
-    finally:
-        await docker.close()
-
-metrics_names = [container_cpu_percentage,  container_memory_percentage ,  container_memory_bytes_total , disk_io_read_counter , disk_io_write_counter , network_rx_counter ,  network_tx_counter ] 
-
-def flush_metric_labels(c):
-    for container in c:
-        if container.status != "running":
-            for m in metrics_names:
-                m.clear()
-
-@app.route('/')
-def index():
-    return "Welcome To CXP, Contianer Exporter For Prometheus."
-
-@app.route('/metrics')
-def metrics():    
-    try:
-        all_containers = get_containers(all=True)
-        update_container_status(all_containers)
-        flush_metric_labels(all_containers)
-        loop = new_event_loop()
-        t = [loop.create_task(container_stats())]
-        loop.run_until_complete(wait(t))
+        running_containers = await get_containers()
+        update_container_status(running_containers)
+        prune_stale_metrics([c._container.get("Names")[0][1:] for c in running_containers], prunable_metrics, persistent_metrics)
+        await container_stats(running_containers)
+        return PlainTextResponse(
+            content=generate_latest(),
+            media_type=CONTENT_TYPE_LATEST 
+        )
     except Exception as e:
-        return f"Error running script: {str(e)}"
-
-    return Response(generate_latest(), mimetype='text/plain')
-
-def create_app():
-    app.config.from_object(config.Config)
-    return app
-
-if __name__ == "__main__":
-    app.run('0.0.0.0', 8000)
+        basicConfig(    
+            level=ERROR,
+            format='%(asctime)s ERROR %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        error(str(e))
+        return PlainTextResponse(f"Error running metrics collection: {str(e)}", status_code=500)
