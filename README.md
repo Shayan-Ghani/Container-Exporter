@@ -97,12 +97,18 @@ kill -9 <PID>
 ```
 Replace `<PID>` with the pid of ./start.sh script.
 
-#### 🚢 Run With A Custom Port:
-```bash
-./start.sh <your custome port> &
-```
+#### 🚢 Run With A Custom Parameters:
 
-Change `<your custom port>` with a port of your choice.
+- adjust the following settings for `uvicorn` as environment variables:
+  - HOST (Default: 0.0.0.0)
+  - PORT (Default: 8000)
+  - WORKERS (Default : 3)
+  - LOG_LEVEL (Default : warning)
+
+Example:
+```bash
+PORT="8000" ./start.sh <your custome port> &
+```
 
 ### 🔥 Add CXP to Prometheus
 - Edit your `prometheus.yml` file and add the address of container-exporter in scrape_configs:
