@@ -8,7 +8,6 @@ on:
       - 'capture/**'
       - 'ansible/**'
       - 'dashboards/**'
-      - 'scripts/**'
       - '.gitignore'
       - 'LICENSE'
 
