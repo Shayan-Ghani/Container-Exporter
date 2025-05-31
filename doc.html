@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
         rel="stylesheet">
+    <!-- in your <head> -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -24,15 +27,34 @@
             --brand-heading: #FFA07A;
             /* for h1/h2 */
             --brand-accent: #FFAB91;
-            /* for h3, hover states */
+
+            /* --font-main:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                "Helvetica Neue",
+                Arial,
+                sans-serif; */
+
+            --font-main: "Inter",
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                "Helvetica Neue",
+                Arial,
+                sans-serif;
+
+            --font-code: "Source Code Pro", monospace;
         }
 
 
         body {
             background-color: #0d0d0d;
-            font-family: "Source Code Pro", monospace;
-            font-size: 18px;
-            color: #fafafa;
+            font-family: var(--font-main);
+            font-size: 20px;
+            color: #e0e0e0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -76,7 +98,7 @@
             display: flex;
             flex-direction: column;
             gap: 1.8rem;
-            line-height: 2.5rem;
+            line-height: 1.9rem;
 
         }
 
@@ -96,8 +118,7 @@
         }
 
         p {
-            line-height: 2.5rem;
-            color: #ccc;
+            color: #e0e0e0;
         }
 
         ol,
@@ -106,7 +127,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            color: #ccc;
+            color: #fffdfd;
         }
 
         li {
@@ -114,6 +135,7 @@
         }
 
         pre {
+            font-family: var(--font-code);
             background: #111;
             color: #fafafa;
             padding: 1rem;
@@ -123,6 +145,7 @@
         }
 
         code {
+            font-family: var(--font-code);
             background: #111;
             color: #fafafa;
             padding: 0.2rem 0.5rem;
@@ -185,7 +208,6 @@
             color: var(--brand-accent);
             font-size: 1.4rem;
         }
-
     </style>
 </head>
 
@@ -240,26 +262,31 @@
 
         <div class="section" id="settings">
             <h2>Config and Settings </h2>
-            <div class="config">
-                <h3>Uvicorn</h3>
-                <p>the following settings can be set via exporting environment variables and are applied to <code>start.sh</code> entrypoint. </p>
-                <ul>
-                    <li>HOST (Default: 0.0.0.0)</li>
-                    <li>PORT (Default: 8000)</li>
-                    <li>WORKERS: Prometheus Multi-Processesing needed, not Implemented yet as of version [1.3.0] (Default : 1)</li>
-                    <li>LOG_LEVEL (Default : warning) </li>
-                </ul>
-            </div>
+
+            <h3>Uvicorn</h3>
+            <p>the following settings can be set via exporting environment variables and are applied to
+                <code>start.sh</code> entrypoint.
+            </p>
+            <ul>
+                <li><code>HOST (Default: 0.0.0.0)</code></li>
+                <li><code>PORT (Default: 8000)</code></li>
+                <li><code>WORKERS:(Default : 1)</code></li>
+                <p>Prometheus Multi-Processesing needed, not Implemented yet as of version [1.3.0] </p>
+                <li>LOG_LEVEL (Default : warning) </li>
+            </ul>
+
             <h3>App Settings</h3>
             <p>the following settings can be set via exporting environment variables or a <code>.env</code> file. </p>
             <ul>
                 <li><code>CONTAINER_EXPORTER_CLEAR_METRICS</code> (Default: True)</li>
-                <p>when set to False the metrics for container stats will not be fully cleared and set to zero to retain the time series data recorded for that container.
-                    note that only <b>Gauge Metrics</b>  can be set to zero, so <code>network</code> and <code>disk io</code> settings will be fully cleared either way.
+                <p>when set to False the metrics for container stats will not be fully cleared and set to zero to retain
+                    the time series data recorded for that container.
+                    note that only <b>Gauge Metrics</b> can be set to zero, so <code>network</code> and
+                    <code>disk io</code> settings will be fully cleared either way.
                 </p>
             </ul>
             <div class="config">
-                
+
             </div>
 
 
@@ -334,7 +361,9 @@ pip install -r requirements.txt
             <div class="section" id="alerting">
                 <h2>Alerting Rules</h2>
                 <p>
-                    A page of sample Prometheus rules can be accessed <a href="./rules.html">here</a> . setting alerts on <code>cxp_container_status</code> is one of the main points users prefer <code>CXP</code> over<code>cAdvisor.</code> 
+                    A page of sample Prometheus rules can be accessed <a href="./rules.html">here</a> . setting alerts
+                    on <code>cxp_container_status</code> is one of the main points users prefer <code>CXP</code>
+                    over<code>cAdvisor.</code>
                 </p>
             </div>
 
