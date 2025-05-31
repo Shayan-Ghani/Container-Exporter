@@ -8,6 +8,8 @@ def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[Prom
     """
     Removes time series for inactive containers from selected metrics
     while preserving container status metrics by setting them to 0.
+    when CONTAINER_EXPORTER_CLEAR_METRICS is set False it only clears Counter metrics
+    Gauge metrics are set to 0.
     """
     active_set = set(active_names)
 
