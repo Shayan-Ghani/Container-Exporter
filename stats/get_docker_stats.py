@@ -33,7 +33,7 @@ def calculate_memory_percentage(stats: dict) -> float:
     return (usage / limit) * 100.0
 
 
-def calculate_memory_bytes(stats) -> bytes:
+def calculate_memory_bytes(stats) -> float:
     mem_stats = stats.get('memory_stats', {}) or {}
     memory_usage_bytes = mem_stats.get('usage')
     

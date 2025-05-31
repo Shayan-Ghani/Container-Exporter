@@ -116,7 +116,7 @@
               "uid": "Your prometheus data source uid"
             },
             "editorMode": "code",
-            "expr": "sum(docker_container_memory_percentage) by (container_name)",
+            "expr": "sum(cxp_memory_percentage) by (container_name)",
             "instant": false,
             "range": true,
             "refId": "A"
