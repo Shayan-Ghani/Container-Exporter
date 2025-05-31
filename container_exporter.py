@@ -28,10 +28,10 @@ gauge_cpu_percentage = Gauge('cxp_cpu_percentage', 'Docker container CPU usage',
 gauge_memory_percentage = Gauge('cxp_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
 gauge_memory_bytes = Gauge('cxp_memory_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
 
-counter_disk_read = Counter("cxp_disk_io_read_bytes_total", "Total bytes read from disk", ['container_name'])
-counter_disk_write = Counter("cxp_disk_io_write_bytes_total", "Total bytes written to disk", ['container_name'])
-counter_net_rx = Counter("cxp_network_rx_bytes_total", "Total bytes received over network", ['container_name'])
-counter_net_tx = Counter("cxp_network_tx_bytes_total", "Total bytes sent over network", ['container_name'])
+counter_disk_read = Gauge("cxp_disk_io_read_bytes_total", "Total bytes read from disk", ['container_name'])
+counter_disk_write = Gauge("cxp_disk_io_write_bytes_total", "Total bytes written to disk", ['container_name'])
+counter_net_rx = Gauge("cxp_network_rx_bytes_total", "Total bytes received over network", ['container_name'])
+counter_net_tx = Gauge("cxp_network_tx_bytes_total", "Total bytes sent over network", ['container_name'])
 
 
 metrics_to_clear: list[PromMetric] = [gauge_cpu_percentage, gauge_memory_percentage, gauge_memory_bytes, counter_disk_read, counter_disk_write, counter_net_rx, counter_net_tx]
@@ -57,10 +57,10 @@ async def container_stats( running_containers: list[DockerContainer]):
         disk_read, disk_write = stat.calculate_disk_io(stats[0])
         net_rx, net_tx = stat.calculate_network_io(stats[0])
 
-        counter_disk_read.labels(container_name=name).inc(disk_read)
-        counter_disk_write.labels(container_name=name).inc(disk_write)
-        counter_net_rx.labels(container_name=name).inc(net_rx)
-        counter_net_tx.labels(container_name=name).inc(net_tx)
+        counter_disk_read.labels(container_name=name).set(disk_read)
+        counter_disk_write.labels(container_name=name).set(disk_write)
+        counter_net_rx.labels(container_name=name).set(net_rx)
+        counter_net_tx.labels(container_name=name).set(net_tx)
 
 # List of metrics we want to prune (performance counters)
 prunable_metrics: list[PromMetric] = [
