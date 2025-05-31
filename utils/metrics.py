@@ -4,7 +4,7 @@ from prometheus_client import Gauge, Counter
 from settings.settings import settings
 PromMetric = Union[Gauge, Counter]
 
-def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[PromMetric], persistent_metrics : list[PromMetric]):
+def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[PromMetric], persistent_metrics : list[Gauge]):
     """
     Removes time series for inactive containers from selected metrics
     while preserving container status metrics by setting them to 0.
@@ -30,9 +30,11 @@ def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[Prom
             if name not in active_set:
                 metric.labels(container_name=name).set(0)
 
-
-def flush_metric_labels(containers:list[DockerContainer], metrics_to_clear: list[PromMetric]):
-    for container in containers:
-        if container._container.get("State") != "running":
-            for metric in metrics_to_clear:
-                metric.labels(container_name=container._container.get("Names")[0][1:]).set(0)
+def normalize_name(raw_names: list[str], fallback_id: str) -> str:
+    """
+    Given Docker’s 'Names' array (e.g. ['/my‐container']), pick the first one and strip leading '/'.
+    If it’s missing or empty, return a short version of container ID.
+    """
+    if raw_names and isinstance(raw_names, list) and raw_names[0]:
+        return raw_names[0].lstrip("/")
+    return fallback_id[:12]
