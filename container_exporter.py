@@ -42,6 +42,8 @@ counter_disk_write = Gauge("cxp_disk_io_write_bytes_total", "Total bytes written
 counter_net_rx = Gauge("cxp_network_rx_bytes_total", "Total bytes received over network", ['container_name'])
 counter_net_tx = Gauge("cxp_network_tx_bytes_total", "Total bytes sent over network", ['container_name'])
 
+counter_running_containers_total = Gauge("cxp_running_cotainers_total", "Total number of running containers")
+
 async def get_containers(all=False) -> list[DockerContainer]:
     return await docker_client.containers.list(all=all)
 
@@ -56,9 +58,12 @@ def update_container_status(running_containers:list[DockerContainer]):
             gauge_container_status.labels(container_name=name).set(2)
 
 # Async metrics gathering
-async def container_stats( running_containers: list[DockerContainer]):
+async def container_stats(running_containers: list[DockerContainer]):
     all_stats = await stat.get_containers_stats(running_containers)
+    running_containers_total = len(running_containers)
     
+    counter_running_containers_total.set(running_containers_total)
+
     for stats in all_stats:
         name = stats[0].get('name', stats[0].get('id', 'Unkown').lstrip("/")).lstrip("/")
         
@@ -80,7 +85,9 @@ prunable_metrics: list[PromMetric] = [
 ]
 
 # Metrics we want to always keep, and set to 0 instead
-persistent_metrics: list[Gauge] = [gauge_container_status]
+persistent_metrics: list[Gauge] = [
+    gauge_container_status, counter_running_containers_total
+]
 
 
 @app.get("/")
