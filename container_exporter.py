@@ -37,12 +37,12 @@ gauge_cpu_percentage = Gauge('cxp_cpu_percentage', 'Docker container CPU usage',
 gauge_memory_percentage = Gauge('cxp_memory_percentage', 'Docker container memory usage in percent', ['container_name'])
 gauge_memory_bytes = Gauge('cxp_memory_bytes_total', 'Docker container memory usage in bytes', ['container_name'])
 
-counter_disk_read = Gauge("cxp_disk_io_read_bytes_total", "Total bytes read from disk", ['container_name'])
-counter_disk_write = Gauge("cxp_disk_io_write_bytes_total", "Total bytes written to disk", ['container_name'])
-counter_net_rx = Gauge("cxp_network_rx_bytes_total", "Total bytes received over network", ['container_name'])
-counter_net_tx = Gauge("cxp_network_tx_bytes_total", "Total bytes sent over network", ['container_name'])
+gauge_disk_read = Gauge("cxp_disk_io_read_bytes_total", "Total bytes read from disk", ['container_name'])
+gauge_disk_write = Gauge("cxp_disk_io_write_bytes_total", "Total bytes written to disk", ['container_name'])
+gauge_net_rx = Gauge("cxp_network_rx_bytes_total", "Total bytes received over network", ['container_name'])
+gauge_net_tx = Gauge("cxp_network_tx_bytes_total", "Total bytes sent over network", ['container_name'])
 
-counter_running_containers_total = Gauge("cxp_running_cotainers_total", "Total number of running containers")
+gauge_running_containers_total = Gauge("cxp_running_cotainers_total", "Total number of running containers")
 
 async def get_containers(all=False) -> list[DockerContainer]:
     return await docker_client.containers.list(all=all)
@@ -62,7 +62,7 @@ async def container_stats(running_containers: list[DockerContainer]):
     all_stats = await stat.get_containers_stats(running_containers)
     running_containers_total = len(running_containers)
     
-    counter_running_containers_total.set(running_containers_total)
+    gauge_running_containers_total.set(running_containers_total)
 
     for stats in all_stats:
         name = stats[0].get('name', stats[0].get('id', 'Unkown').lstrip("/")).lstrip("/")
@@ -73,20 +73,20 @@ async def container_stats(running_containers: list[DockerContainer]):
         disk_read, disk_write = stat.calculate_disk_io(stats[0])
         net_rx, net_tx = stat.calculate_network_io(stats[0])
 
-        counter_disk_read.labels(container_name=name).set(disk_read)
-        counter_disk_write.labels(container_name=name).set(disk_write)
-        counter_net_rx.labels(container_name=name).set(net_rx)
-        counter_net_tx.labels(container_name=name).set(net_tx)
+        gauge_disk_read.labels(container_name=name).set(disk_read)
+        gauge_disk_write.labels(container_name=name).set(disk_write)
+        gauge_net_rx.labels(container_name=name).set(net_rx)
+        gauge_net_tx.labels(container_name=name).set(net_tx)
 
 # List of metrics we want to prune (performance counters)
 prunable_metrics: list[PromMetric] = [
     gauge_cpu_percentage, gauge_memory_percentage, gauge_memory_bytes,
-    counter_disk_read, counter_disk_write, counter_net_rx, counter_net_tx
+    gauge_disk_read, gauge_disk_write, gauge_net_rx, gauge_net_tx
 ]
 
 # Metrics we want to always keep, and set to 0 instead
 persistent_metrics: list[Gauge] = [
-    gauge_container_status, counter_running_containers_total
+    gauge_container_status, gauge_running_containers_total
 ]
 
 
