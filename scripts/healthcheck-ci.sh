@@ -49,7 +49,7 @@ fi
 
 log "Displaying container-related metrics:"
 echo -e "\n${GREEN}--- Metrics with container added ---${NC}"
-grep 'container_name' "${log_dir}/metrics.txt" | sort | uniq || echo "(No container metrics found)"
+grep -e '^cxp' "${log_dir}/metrics.txt" | sort | uniq || echo "(No container metrics found)"
 
 log "Removing test container..."
 docker rm -f "$container_name" >/dev/null || fail "Failed to remove test container"
@@ -66,7 +66,7 @@ fi
 
 log "Displaying container-related metrics after removal:"
 echo -e "\n${GREEN}--- Metrics after container removed ---${NC}"
-grep 'container_name' "${log_dir}/metrics_post_remove.txt" | sort | uniq || echo "(No container metrics found)"
+grep '^cxp' "${log_dir}/metrics_post_remove.txt" | sort | uniq || echo "(No container metrics found)"
 
 pass "Full Healthcheck Completed Successfully."
 
