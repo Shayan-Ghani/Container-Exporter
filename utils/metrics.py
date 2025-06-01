@@ -14,6 +14,8 @@ def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[Prom
     active_set = set(active_names)
 
     for metric in prunable_metrics:
+        if not hasattr(metric, '_metrics'):
+            continue
         for labels in metric._metrics:
             name = labels[0]
             if name not in active_set:
@@ -25,6 +27,8 @@ def prune_stale_metrics(active_names: Iterable[str], prunable_metrics: list[Prom
                     metric.clear()                    
                         
     for metric in persistent_metrics:
+        if not hasattr(metric, '_metrics'):
+            continue
         for labels in list(metric._metrics):
             name = labels[0]
             if name not in active_set:
