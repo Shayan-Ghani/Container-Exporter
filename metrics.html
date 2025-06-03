@@ -16,7 +16,7 @@
         # HELP cxp_container_status Docker container status (0 = not running, 1 = running, 2 = restarting/unhealthy)
         # TYPE cxp_container_status gauge
         cxp_container_status{container_name="mysql"} 1.0
-        cxp_container_status{container_name="nginx"} 0.0
+        cxp_container_status{container_name="nginx"} 1.0
         cxp_container_status{container_name="redis"} 1.0
         
         # HELP cxp_cpu_percentage Docker container cpu usage
@@ -85,6 +85,10 @@
         cxp_network_tx_bytes_created{container_name="nginx"} 1.7173190054415700e+09
         cxp_network_tx_bytes_created{container_name="redis"} 1.7173190054416700e+09
         
+        # HELP cxp_running_cotainers_total Total number of running containers
+        # TYPE cxp_running_cotainers_total gauge
+        cxp_running_cotainers_total 3.0
+
       </pre>
     </div>
 
