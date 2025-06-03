@@ -1,7 +1,7 @@
 from aiodocker import Docker
 from aiodocker.containers import DockerContainer
 from stats import get_docker_stats as stat
-from prometheus_client import Gauge, Counter, CONTENT_TYPE_LATEST
+from prometheus_client import Gauge, CONTENT_TYPE_LATEST
 from prometheus_client.exposition import generate_latest
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
