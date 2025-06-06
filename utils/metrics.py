@@ -1,4 +1,3 @@
-from aiodocker.containers import DockerContainer
 from typing import Union, Iterable
 from prometheus_client import Gauge, Counter
 from settings.settings import settings
